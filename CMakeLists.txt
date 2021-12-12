@@ -66,29 +66,30 @@ add_executable(nori
   include/nori/warp.h
 
   # Source code files
-  src/bitmap.cpp
-  src/block.cpp
-  src/accel.cpp
-  src/chi2test.cpp
-  src/common.cpp
-  src/diffuse.cpp
-  src/gui.cpp
-  src/independent.cpp
-  src/main.cpp
-  src/mesh.cpp
-  src/obj.cpp
-  src/object.cpp
-  src/parser.cpp
-  src/perspective.cpp
-  src/proplist.cpp
-  src/rfilter.cpp
-  src/scene.cpp
-  src/ttest.cpp
-  src/warp.cpp
-  src/microfacet.cpp
-  src/mirror.cpp
-  src/dielectric.cpp
-  src/normals.cpp
+  src/core/bitmap.cpp
+  src/core/block.cpp
+  src/core/accel.cpp
+  src/core/chi2test.cpp
+  src/core/common.cpp
+  src/core/diffuse.cpp
+  src/core/gui.cpp
+  src/core/independent.cpp
+  src/core/main.cpp
+  src/core/mesh.cpp
+  src/core/obj.cpp
+  src/core/object.cpp
+  src/core/parser.cpp
+  src/core/perspective.cpp
+  src/core/proplist.cpp
+  src/core/rfilter.cpp
+  src/core/scene.cpp
+  src/core/ttest.cpp
+  src/core/warp.cpp
+  src/core/microfacet.cpp
+  src/core/mirror.cpp
+  src/core/dielectric.cpp
+
+  src/integrators/normals.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
@@ -96,12 +97,12 @@ add_definitions(${NANOGUI_EXTRA_DEFS})
 # The following lines build the warping test application
 add_executable(warptest
   include/nori/warp.h
-  src/warp.cpp
-  src/warptest.cpp
-  src/microfacet.cpp
-  src/object.cpp
-  src/proplist.cpp
-  src/common.cpp
+  src/core/warp.cpp
+  src/core/warptest.cpp
+  src/core/microfacet.cpp
+  src/core/object.cpp
+  src/core/proplist.cpp
+  src/core/common.cpp
 )
 
 if (WIN32)

@@ -54,7 +54,19 @@ public:
     bool rayIntersect(const Ray3f &ray, Intersection &its, bool shadowRay) const;
 
 private:
+
+    struct BVHNode { 
+        BoundingBox3f bbox;
+        BVHNode *lchild = nullptr;
+        BVHNode *rchild = nullptr;
+        std::vector<uint32_t> triangle_list;
+    };
+
+    BVHNode *buildBVHTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end);
+    void traverseBVHTree(Ray3f &ray, Intersection &its, bool &intersected, BVHNode *node) const;
+
     Mesh         *m_mesh = nullptr; ///< Mesh (only a single one for now)
+    BVHNode      *m_bvh_tree;       ///< Tree of bounding volume hierarchies
     BoundingBox3f m_bbox;           ///< Bounding box of the entire scene
 };
 

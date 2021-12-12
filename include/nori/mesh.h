@@ -33,6 +33,8 @@ struct Intersection {
     Frame geoFrame;
     /// Pointer to the associated mesh
     const Mesh *mesh;
+    /// Triangle index of the closest intersection
+    uint32_t f;
 
     /// Create an uninitialized intersection record
     Intersection() : mesh(nullptr) { }
@@ -156,13 +158,13 @@ protected:
     Mesh();
 
 protected:
-    std::string m_name;                  ///< Identifying name
+    std::string   m_name;                ///< Identifying name
     MatrixXf      m_V;                   ///< Vertex positions
     MatrixXf      m_N;                   ///< Vertex normals
     MatrixXf      m_UV;                  ///< Vertex texture coordinates
     MatrixXu      m_F;                   ///< Faces
     BSDF         *m_bsdf = nullptr;      ///< BSDF of the surface
-    Emitter    *m_emitter = nullptr;     ///< Associated emitter, if any
+    Emitter      *m_emitter = nullptr;   ///< Associated emitter, if any
     BoundingBox3f m_bbox;                ///< Bounding box of the mesh
 };
 

@@ -74,9 +74,9 @@ template <typename _PointType> struct TBoundingBox {
     float getSurfaceArea() const {
         VectorType d = max - min;
         float result = 0.0f;
-        for (int i=0; i<Dimension; ++i) {
+        for (int i = 0; i < Dimension; ++i) {
             float term = 1.0f;
-            for (int j=0; j<Dimension; ++j) {
+            for (int j = 0; j < Dimension; ++j) {
                 if (i == j)
                     continue;
                 term *= d[j];
@@ -155,13 +155,13 @@ template <typename _PointType> struct TBoundingBox {
     Scalar squaredDistanceTo(const PointType &p) const {
         Scalar result = 0;
 
-        for (int i=0; i<Dimension; ++i) {
+        for (int i = 0; i < Dimension; ++i) {
             Scalar value = 0;
             if (p[i] < min[i])
                 value = min[i] - p[i];
             else if (p[i] > max[i])
                 value = p[i] - max[i];
-            result += value*value;
+            result += value * value;
         }
 
         return result;
@@ -182,13 +182,13 @@ template <typename _PointType> struct TBoundingBox {
     Scalar squaredDistanceTo(const TBoundingBox &bbox) const {
         Scalar result = 0;
 
-        for (int i=0; i<Dimension; ++i) {
+        for (int i = 0; i < Dimension; ++i) {
             Scalar value = 0;
             if (bbox.max[i] < min[i])
                 value = min[i] - bbox.max[i];
             else if (bbox.min[i] > max[i])
                 value = bbox.min[i] - max[i];
-            result += value*value;
+            result += value * value;
         }
 
         return result;
@@ -229,7 +229,7 @@ template <typename _PointType> struct TBoundingBox {
     int getMajorAxis() const {
         VectorType d = max - min;
         int largest = 0;
-        for (int i=1; i<Dimension; ++i)
+        for (int i = 1; i < Dimension; ++i)
             if (d[i] > d[largest])
                 largest = i;
         return largest;
@@ -239,7 +239,7 @@ template <typename _PointType> struct TBoundingBox {
     int getMinorAxis() const {
         VectorType d = max - min;
         int shortest = 0;
-        for (int i=1; i<Dimension; ++i)
+        for (int i = 1; i < Dimension; ++i)
             if (d[i] < d[shortest])
                 shortest = i;
         return shortest;
@@ -293,7 +293,7 @@ template <typename _PointType> struct TBoundingBox {
 
     /// Return the index of the largest axis
     int getLargestAxis() const {
-        VectorType extents = max-min;
+        VectorType extents = max - min;
 
         if (extents[0] >= extents[1] && extents[0] >= extents[2])
             return 0;
@@ -306,7 +306,7 @@ template <typename _PointType> struct TBoundingBox {
     /// Return the position of a bounding box corner
     PointType getCorner(int index) const {
         PointType result;
-        for (int i=0; i<Dimension; ++i)
+        for (int i = 0; i < Dimension; ++i)
             result[i] = (index & (1 << i)) ? max[i] : min[i];
         return result;
     }
@@ -324,7 +324,7 @@ template <typename _PointType> struct TBoundingBox {
         float nearT = -std::numeric_limits<float>::infinity();
         float farT = std::numeric_limits<float>::infinity();
 
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             float origin = ray.o[i];
             float minVal = min[i], maxVal = max[i];
 
@@ -354,7 +354,7 @@ template <typename _PointType> struct TBoundingBox {
         nearT = -std::numeric_limits<float>::infinity();
         farT = std::numeric_limits<float>::infinity();
 
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++) {
             float origin = ray.o[i];
             float minVal = min[i], maxVal = max[i];
 
