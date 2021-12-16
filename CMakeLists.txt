@@ -89,7 +89,10 @@ add_executable(nori
   src/core/mirror.cpp
   src/core/dielectric.cpp
 
+  # intergrators
   src/integrators/normals.cpp
+  src/integrators/simple.cpp
+  src/integrators/ao.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})

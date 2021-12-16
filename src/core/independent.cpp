@@ -55,7 +55,12 @@ public:
     }
 
     std::string toString() const {
-        return tfm::format("Independent[sampleCount=%i]", m_sampleCount);
+        return tfm::format(
+            " Independent[\n"
+            " sampleCount = %i\n"
+            "]", 
+            m_sampleCount
+        );
     }
 protected:
     Independent() { }

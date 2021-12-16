@@ -55,18 +55,18 @@ public:
 
 private:
 
-    struct BVHNode { 
+    struct BvhNode { 
         BoundingBox3f bbox;
-        BVHNode *lchild = nullptr;
-        BVHNode *rchild = nullptr;
+        BvhNode *lchild = nullptr;
+        BvhNode *rchild = nullptr;
         std::vector<uint32_t> triangle_list;
     };
 
-    BVHNode *buildBVHTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end);
-    void traverseBVHTree(Ray3f &ray, Intersection &its, bool &intersected, BVHNode *node) const;
+    BvhNode *buildBvhTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end);
+    void traverseBvhTree(Ray3f &ray, Intersection &its, bool &intersected, BvhNode *node, bool shadowRay) const;
 
     Mesh         *m_mesh = nullptr; ///< Mesh (only a single one for now)
-    BVHNode      *m_bvh_tree;       ///< Tree of bounding volume hierarchies
+    BvhNode      *m_bvh_tree;       ///< Tree of bounding volume hierarchies
     BoundingBox3f m_bbox;           ///< Bounding box of the entire scene
 };
 

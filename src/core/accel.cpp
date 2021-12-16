@@ -23,11 +23,11 @@ void Accel::build() {
     for (uint32_t i = 0; i < count; ++i)
         triangles.push_back(i);
     
-    m_bvh_tree = buildBVHTree(triangles, 0, count - 1);
+    m_bvh_tree = buildBvhTree(triangles, 0, count - 1);
 }
 
-Accel::BVHNode *Accel::buildBVHTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end) {
-    BVHNode *parent = new BVHNode;
+Accel::BvhNode *Accel::buildBvhTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end) {
+    BvhNode *parent = new BvhNode;
     BoundingBox3f bbox = m_mesh->getBoundingBox(triangles[begin]);
     for (uint32_t i = begin; i <= end; ++i)
         bbox.expandBy(m_mesh->getBoundingBox(triangles[i]));
@@ -49,12 +49,12 @@ Accel::BVHNode *Accel::buildBVHTree(std::vector<uint32_t> &triangles, uint32_t b
         }
     );
     
-    parent->lchild = buildBVHTree(triangles, begin, mid);
-    parent->rchild = buildBVHTree(triangles, mid + 1, end);
+    parent->lchild = buildBvhTree(triangles, begin, mid);
+    parent->rchild = buildBvhTree(triangles, mid + 1, end);
     return parent;
 }
 
-void Accel::traverseBVHTree(Ray3f &ray, Intersection &its, bool &intersected, BVHNode *node) const {
+void Accel::traverseBvhTree(Ray3f &ray, Intersection &its, bool &intersected, BvhNode *node, bool shadowRay) const {
     if (!node || !node->bbox.rayIntersect(ray))
         return;
     
@@ -62,17 +62,20 @@ void Accel::traverseBVHTree(Ray3f &ray, Intersection &its, bool &intersected, BV
         float u, v, t;
         for (auto idx : node->triangle_list) {
             if (m_mesh->rayIntersect(idx, ray, u, v, t) && t < its.t) {
+                if (shadowRay) {
+                    intersected = true;
+                    return;
+                }
                 ray.maxt = its.t = t;
                 its.uv = Point2f(u, v);
                 its.mesh = m_mesh;
                 its.f = idx;
                 intersected = true;
-                // deal with shadow rays
             }
         }
     }
-    traverseBVHTree(ray, its, intersected, node->lchild);
-    traverseBVHTree(ray, its, intersected, node->rchild);
+    traverseBvhTree(ray, its, intersected, node->lchild, shadowRay);
+    traverseBvhTree(ray, its, intersected, node->rchild, shadowRay);
     return;
 }
 
@@ -83,9 +86,9 @@ bool Accel::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) c
 
     Ray3f ray(ray_); /// Make a copy of the ray (we will need to update its '.maxt' value)
 
-    traverseBVHTree(ray, its, intersected, m_bvh_tree);
+    traverseBvhTree(ray, its, intersected, m_bvh_tree, shadowRay);
 
-    if (intersected) {
+    if (intersected && !shadowRay) {
         /* At this point, we now know that there is an intersection,
            and we know the triangle index of the closest such intersection.
            The following computes a number of additional properties which

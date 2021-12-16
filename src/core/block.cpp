@@ -19,7 +19,7 @@ ImageBlock::ImageBlock(const Vector2i &size, const ReconstructionFilter *filter)
         m_filterRadius = filter->getRadius();
         m_borderSize = (int) std::ceil(m_filterRadius - 0.5f);
         m_filter = new float[NORI_FILTER_RESOLUTION + 1];
-        for (int i=0; i<NORI_FILTER_RESOLUTION; ++i) {
+        for (int i = 0; i < NORI_FILTER_RESOLUTION; ++i) {
             float pos = (m_filterRadius * i) / NORI_FILTER_RESOLUTION;
             m_filter[i] = filter->eval(pos);
         }
@@ -44,8 +44,8 @@ ImageBlock::~ImageBlock() {
 
 Bitmap *ImageBlock::toBitmap() const {
     Bitmap *result = new Bitmap(m_size);
-    for (int y=0; y<m_size.y(); ++y)
-        for (int x=0; x<m_size.x(); ++x)
+    for (int y = 0; y < m_size.y(); ++y)
+        for (int x = 0; x < m_size.x(); ++x)
             result->coeffRef(y, x) = coeff(y + m_borderSize, x + m_borderSize).divideByFilterWeight();
     return result;
 }
@@ -54,8 +54,8 @@ void ImageBlock::fromBitmap(const Bitmap &bitmap) {
     if (bitmap.cols() != cols() || bitmap.rows() != rows())
         throw NoriException("Invalid bitmap dimensions!");
 
-    for (int y=0; y<m_size.y(); ++y)
-        for (int x=0; x<m_size.x(); ++x)
+    for (int y = 0; y < m_size.y(); ++y)
+        for (int x = 0; x < m_size.x(); ++x)
             coeffRef(y, x) << bitmap.coeff(y, x), 1;
 }
 
@@ -74,19 +74,19 @@ void ImageBlock::put(const Point2f &_pos, const Color3f &value) {
 
     /* Compute the rectangle of pixels that will need to be updated */
     BoundingBox2i bbox(
-        Point2i((int)  std::ceil(pos.x() - m_filterRadius), (int)  std::ceil(pos.y() - m_filterRadius)),
+        Point2i((int) std::ceil(pos.x() - m_filterRadius), (int) std::ceil(pos.y() - m_filterRadius)),
         Point2i((int) std::floor(pos.x() + m_filterRadius), (int) std::floor(pos.y() + m_filterRadius))
     );
     bbox.clip(BoundingBox2i(Point2i(0, 0), Point2i((int) cols() - 1, (int) rows() - 1)));
 
     /* Lookup values from the pre-rasterized filter */
-    for (int x=bbox.min.x(), idx = 0; x<=bbox.max.x(); ++x)
-        m_weightsX[idx++] = m_filter[(int) (std::abs(x-pos.x()) * m_lookupFactor)];
-    for (int y=bbox.min.y(), idx = 0; y<=bbox.max.y(); ++y)
-        m_weightsY[idx++] = m_filter[(int) (std::abs(y-pos.y()) * m_lookupFactor)];
+    for (int x = bbox.min.x(), idx = 0; x <= bbox.max.x(); ++x)
+        m_weightsX[idx++] = m_filter[(int) (std::abs(x - pos.x()) * m_lookupFactor)];
+    for (int y = bbox.min.y(), idx = 0; y <= bbox.max.y(); ++y)
+        m_weightsY[idx++] = m_filter[(int) (std::abs(y - pos.y()) * m_lookupFactor)];
 
-    for (int y=bbox.min.y(), yr=0; y<=bbox.max.y(); ++y, ++yr) 
-        for (int x=bbox.min.x(), xr=0; x<=bbox.max.x(); ++x, ++xr) 
+    for (int y = bbox.min.y(), yr = 0; y <= bbox.max.y(); ++y, ++yr) 
+        for (int x = bbox.min.x(), xr = 0; x <= bbox.max.x(); ++x, ++xr) 
             coeffRef(y, x) += Color4f(value) * m_weightsX[xr] * m_weightsY[yr];
 }
     
