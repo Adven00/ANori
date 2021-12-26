@@ -2,7 +2,6 @@
 #include <nori/scene.h>
 #include <nori/warp.h>
 
-
 NORI_NAMESPACE_BEGIN
 
 class AmbientLightIntegrator : public Integrator {

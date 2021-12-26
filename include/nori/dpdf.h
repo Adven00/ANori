@@ -35,22 +35,22 @@ public:
 
     /// Reserve memory for a certain number of entries
     void reserve(size_t nEntries) {
-        m_cdf.reserve(nEntries+1);
+        m_cdf.reserve(nEntries + 1);
     }
 
     /// Append an entry with the specified discrete probability
     void append(float pdfValue) {
-        m_cdf.push_back(m_cdf[m_cdf.size()-1] + pdfValue);
+        m_cdf.push_back(m_cdf[m_cdf.size() - 1] + pdfValue);
     }
 
     /// Return the number of entries so far
     size_t size() const {
-        return m_cdf.size()-1;
+        return m_cdf.size() - 1;
     }
 
     /// Access an entry by its index
     float operator[](size_t entry) const {
-        return m_cdf[entry+1] - m_cdf[entry];
+        return m_cdf[entry + 1] - m_cdf[entry];
     }
 
     /// Have the probability densities been normalized?
@@ -82,12 +82,12 @@ public:
      * \return Sum of the (previously unnormalized) entries
      */
     float normalize() {
-        m_sum = m_cdf[m_cdf.size()-1];
+        m_sum = m_cdf[m_cdf.size() - 1];
         if (m_sum > 0) {
             m_normalization = 1.0f / m_sum;
-            for (size_t i=1; i<m_cdf.size(); ++i) 
+            for (size_t i = 1; i < m_cdf.size(); ++i) 
                 m_cdf[i] *= m_normalization;
-            m_cdf[m_cdf.size()-1] = 1.0f;
+            m_cdf[m_cdf.size() - 1] = 1.0f;
             m_normalized = true;
         } else {
             m_normalization = 0.0f;
@@ -107,7 +107,7 @@ public:
         std::vector<float>::const_iterator entry = 
                 std::lower_bound(m_cdf.begin(), m_cdf.end(), sampleValue);
         size_t index = (size_t) std::max((ptrdiff_t) 0, entry - m_cdf.begin() - 1);
-        return std::min(index, m_cdf.size()-2);
+        return std::min(index, m_cdf.size() - 2);
     }
 
     /**
@@ -167,12 +167,12 @@ public:
      * human-readable string format
      */
     std::string toString() const {
-        std::string result = tfm::format("DiscretePDF[sum=%f, "
-            "normalized=%f, pdf = {", m_sum, m_normalized);
+        std::string result = tfm::format("DiscretePDF[sum = %f, "
+            "normalized = %f, pdf = {", m_sum, m_normalized);
 
-        for (size_t i=0; i<m_cdf.size(); ++i) {
+        for (size_t i = 0; i < m_cdf.size() - 1; ++i) {
             result += std::to_string(operator[](i));
-            if (i != m_cdf.size()-1)
+            if (i != m_cdf.size() - 2)
                 result += ", ";
         }
         return result + "}]";

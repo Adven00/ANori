@@ -9,6 +9,8 @@
 #include <nori/object.h>
 #include <nori/frame.h>
 #include <nori/bbox.h>
+#include <nori/sampler.h>
+#include <nori/dpdf.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -144,8 +146,15 @@ public:
     /// Return the name of this mesh
     const std::string &getName() const { return m_name; }
 
+    /// Return the sample probability (uniform)
+    float getSamplePdf() const { return m_areaDP.getNormalization(); }
+
+    /// Return the sample result (uniform)
+    std::tuple<Point3f, Vector3f> getSampleResult(const Point3f &sample) const;
+
     /// Return a human-readable summary of this instance
     std::string toString() const;
+
 
     /**
      * \brief Return the type of object (i.e. Mesh/BSDF/etc.)
@@ -166,6 +175,7 @@ protected:
     BSDF         *m_bsdf = nullptr;      ///< BSDF of the surface
     Emitter      *m_emitter = nullptr;   ///< Associated emitter, if any
     BoundingBox3f m_bbox;                ///< Bounding box of the mesh
+    DiscretePDF   m_areaDP;              ///< Distribution of surface area
 };
 
 NORI_NAMESPACE_END

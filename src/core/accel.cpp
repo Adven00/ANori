@@ -10,47 +10,52 @@
 NORI_NAMESPACE_BEGIN
 
 void Accel::addMesh(Mesh *mesh) {
-    if (m_mesh)
-        throw NoriException("Accel: only a single mesh is supported!");
-    m_mesh = mesh;
-    m_bbox = m_mesh->getBoundingBox();
+    m_meshes.push_back(mesh);
+    m_bbox.expandBy(mesh->getBoundingBox());
 }
 
 void Accel::build() {
+    std::vector<TriInfo> tris;
+    for (auto mesh : m_meshes) {
+        uint32_t count = mesh->getTriangleCount();
+
+        for (uint32_t i = 0; i < count; ++i)
+            tris.push_back(TriInfo(i, mesh));
+    }
     
-    uint32_t count = m_mesh->getTriangleCount();
-    std::vector<uint32_t> triangles;
-    for (uint32_t i = 0; i < count; ++i)
-        triangles.push_back(i);
-    
-    m_bvh_tree = buildBvhTree(triangles, 0, count - 1);
+    m_bvhTree = buildBvhTree(tris, 0, uint32_t(tris.size() - 1));
 }
 
-Accel::BvhNode *Accel::buildBvhTree(std::vector<uint32_t> &triangles, uint32_t begin, uint32_t end) {
+Accel::BvhNode *Accel::buildBvhTree(std::vector<TriInfo> &tris, uint32_t begin, uint32_t end) {
+
+    /* Build bbox for every node */
     BvhNode *parent = new BvhNode;
-    BoundingBox3f bbox = m_mesh->getBoundingBox(triangles[begin]);
+    BoundingBox3f bbox;
     for (uint32_t i = begin; i <= end; ++i)
-        bbox.expandBy(m_mesh->getBoundingBox(triangles[i]));
+        bbox.expandBy(tris[i].mesh->getBoundingBox(tris[i].f));
     parent->bbox = bbox;
 
+    /* Fill the triangle list of leaf node */
     if (end - begin  < 10) {
         for (uint32_t i = begin; i <= end; ++i)
-            parent->triangle_list.push_back(triangles[i]);
+            parent->tri_list.push_back(tris[i]);
         return parent;
     }
 
+    /* Split the node accroding to the position of middle triangle. 
+       Ensure numbers of triangles are the same in both child nodes */
     int axis = bbox.getLargestAxis();
     uint32_t mid = (begin + end) / 2;
     std::sort(
-        triangles.begin() + begin,
-        triangles.begin() + end + 1,
-        [&](uint32_t a, uint32_t b) {
-            return m_mesh->getCentroid(a)[axis] < m_mesh->getCentroid(b)[axis];
+        tris.begin() + begin,
+        tris.begin() + end + 1,
+        [&](TriInfo a, TriInfo b) {
+            return a.mesh->getCentroid(a.f)[axis] < b.mesh->getCentroid(b.f)[axis];
         }
     );
     
-    parent->lchild = buildBvhTree(triangles, begin, mid);
-    parent->rchild = buildBvhTree(triangles, mid + 1, end);
+    parent->lchild = buildBvhTree(tris, begin, mid);
+    parent->rchild = buildBvhTree(tris, mid + 1, end);
     return parent;
 }
 
@@ -60,16 +65,18 @@ void Accel::traverseBvhTree(Ray3f &ray, Intersection &its, bool &intersected, Bv
     
     if (!node->lchild && !node->rchild) {
         float u, v, t;
-        for (auto idx : node->triangle_list) {
-            if (m_mesh->rayIntersect(idx, ray, u, v, t) && t < its.t) {
+        for (auto ti : node->tri_list) {
+            if (ti.mesh->rayIntersect(ti.f, ray, u, v, t) && t < its.t) {
+                /* For shadow ray we don't need to record */
                 if (shadowRay) {
                     intersected = true;
                     return;
                 }
+                /* Record the intersection */
                 ray.maxt = its.t = t;
                 its.uv = Point2f(u, v);
-                its.mesh = m_mesh;
-                its.f = idx;
+                its.mesh = ti.mesh;
+                its.f = ti.f;
                 intersected = true;
             }
         }
@@ -86,14 +93,13 @@ bool Accel::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) c
 
     Ray3f ray(ray_); /// Make a copy of the ray (we will need to update its '.maxt' value)
 
-    traverseBvhTree(ray, its, intersected, m_bvh_tree, shadowRay);
+    traverseBvhTree(ray, its, intersected, m_bvhTree, shadowRay);
 
     if (intersected && !shadowRay) {
         /* At this point, we now know that there is an intersection,
            and we know the triangle index of the closest such intersection.
            The following computes a number of additional properties which
-           characterize the intersection (normals, texture coordinates, etc..)
-        */
+           characterize the intersection (normals, texture coordinates, etc..) */
 
         /* Find the barycentric coordinates */
         Vector3f bary;

@@ -78,7 +78,7 @@ public:
                     nVertices = 6;
                 }
                 /* Convert to an indexed vertex list */
-                for (int i=0; i<nVertices; ++i) {
+                for (int i = 0; i < nVertices; ++i) {
                     const OBJVertex &v = verts[i];
                     VertexMap::const_iterator it = vertexMap.find(v);
                     if (it == vertexMap.end()) {
@@ -96,19 +96,19 @@ public:
         memcpy(m_F.data(), indices.data(), sizeof(uint32_t)*indices.size());
 
         m_V.resize(3, vertices.size());
-        for (uint32_t i=0; i<vertices.size(); ++i)
-            m_V.col(i) = positions.at(vertices[i].p-1);
+        for (uint32_t i = 0; i < vertices.size(); ++i)
+            m_V.col(i) = positions.at(vertices[i].p - 1);
 
         if (!normals.empty()) {
             m_N.resize(3, vertices.size());
-            for (uint32_t i=0; i<vertices.size(); ++i)
-                m_N.col(i) = normals.at(vertices[i].n-1);
+            for (uint32_t i = 0; i < vertices.size(); ++i)
+                m_N.col(i) = normals.at(vertices[i].n - 1);
         }
 
         if (!texcoords.empty()) {
             m_UV.resize(2, vertices.size());
-            for (uint32_t i=0; i<vertices.size(); ++i)
-                m_UV.col(i) = texcoords.at(vertices[i].uv-1);
+            for (uint32_t i = 0; i < vertices.size(); ++i)
+                m_UV.col(i) = texcoords.at(vertices[i].uv - 1);
         }
 
         m_name = filename.str();

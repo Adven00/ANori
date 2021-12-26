@@ -71,7 +71,6 @@ add_executable(nori
   src/core/accel.cpp
   src/core/chi2test.cpp
   src/core/common.cpp
-  src/core/diffuse.cpp
   src/core/gui.cpp
   src/core/independent.cpp
   src/core/main.cpp
@@ -85,14 +84,21 @@ add_executable(nori
   src/core/scene.cpp
   src/core/ttest.cpp
   src/core/warp.cpp
-  src/core/microfacet.cpp
-  src/core/mirror.cpp
-  src/core/dielectric.cpp
 
   # intergrators
   src/integrators/normals.cpp
   src/integrators/simple.cpp
+  src/integrators/whitted.cpp
   src/integrators/ao.cpp
+
+  # emitters
+  src/emitters/area.cpp
+
+  # materials
+  src/materials/dielectric.cpp
+  src/materials/diffuse.cpp
+  src/materials/microfacet.cpp
+  src/materials/mirror.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
@@ -102,10 +108,11 @@ add_executable(warptest
   include/nori/warp.h
   src/core/warp.cpp
   src/core/warptest.cpp
-  src/core/microfacet.cpp
   src/core/object.cpp
   src/core/proplist.cpp
   src/core/common.cpp
+
+  src/materials/microfacet.cpp
 )
 
 if (WIN32)

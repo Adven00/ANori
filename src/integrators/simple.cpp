@@ -19,7 +19,7 @@ public:
         Ray3f shadowRay = Ray3f(its.p, lightDir);
         int visiblity = scene->rayIntersect(shadowRay) ? 0 : 1;
 
-        auto cosTheta = its.shFrame.cosTheta(its.shFrame.toLocal(lightDir));
+        auto cosTheta = Frame::cosTheta(its.shFrame.toLocal(lightDir));
         float attenuation = std::max(0.f, cosTheta) / std::pow((m_position - its.p).norm(), 2.0f);
 
         Color3f color = m_energy * INV_PI * INV_FOURPI;

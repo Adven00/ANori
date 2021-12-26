@@ -9,6 +9,7 @@
 #include <nori/bsdf.h>
 #include <nori/emitter.h>
 #include <nori/warp.h>
+#include <nori/dpdf.h>
 #include <Eigen/Geometry>
 
 NORI_NAMESPACE_BEGIN
@@ -26,6 +27,13 @@ void Mesh::activate() {
         m_bsdf = static_cast<BSDF *>(
             NoriObjectFactory::createInstance("diffuse", PropertyList()));
     }
+
+    /* Initialize area distribution m_areaDP */
+    m_areaDP.reserve(getTriangleCount());
+    for (uint32_t idx = 0; idx < getTriangleCount(); ++idx) {
+        m_areaDP.append(surfaceArea(idx));
+    }
+    m_areaDP.normalize();
 }
 
 float Mesh::surfaceArea(uint32_t index) const {
@@ -87,6 +95,37 @@ Point3f Mesh::getCentroid(uint32_t index) const {
         (m_V.col(m_F(0, index)) +
          m_V.col(m_F(1, index)) +
          m_V.col(m_F(2, index)));
+}
+
+std::tuple<Point3f, Vector3f> Mesh::getSampleResult(const Point3f &sample) const {
+    /* Samlpe a triangle */
+    uint32_t idx = uint32_t(m_areaDP.sample(sample.x()));
+
+    /* Sample the barycentric coordinates*/
+    float u = 1 - sqrt(1 - sample.y());
+    float v = sample.z() * sqrt(1 - sample.y());
+    float w = 1 - u - v;
+
+    /* Get triangle information */
+    Point3f v0 = m_V.col(m_F(0, idx));
+    Point3f v1 = m_V.col(m_F(1, idx));
+    Point3f v2 = m_V.col(m_F(2, idx));
+    Point3f p = u * v0 + v * v1 + w * v2;
+
+    Vector3f n;
+    /* If vertex normal exists */
+    if (m_N.size() != 0) {
+        Vector3f n0 = m_N.col(m_F(0, idx));
+        Vector3f n1 = m_N.col(m_F(1, idx));
+        Vector3f n2 = m_N.col(m_F(2, idx));
+        n = (u * n0 + v * n1 + w * n2).normalized();
+    } else {
+        Vector3f e1 = v1 - v0;
+        Vector3f e2 = v2 - v0;
+        n = e1.cross(e2).normalized();
+    }
+
+    return {p, n};
 }
 
 void Mesh::addChild(NoriObject *obj) {

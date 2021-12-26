@@ -38,6 +38,13 @@ void Scene::activate() {
             NoriObjectFactory::createInstance("independent", PropertyList()));
     }
 
+    
+    for (auto mesh : m_meshes) {
+        if (mesh->isEmitter()) {
+            m_emitters.push_back(mesh);
+        }
+    }
+
     cout << endl;
     cout << "Configuration: " << toString() << endl;
     cout << endl;
@@ -52,12 +59,13 @@ void Scene::addChild(NoriObject *obj) {
             }
             break;
         
+        
         case EEmitter: {
                 //Emitter *emitter = static_cast<Emitter *>(obj);
-                /* TBD */
                 throw NoriException("Scene::addChild(): You need to implement this for emitters");
             }
             break;
+        
 
         case ESampler:
             if (m_sampler)
@@ -85,7 +93,7 @@ void Scene::addChild(NoriObject *obj) {
 
 std::string Scene::toString() const {
     std::string meshes;
-    for (size_t i=0; i<m_meshes.size(); ++i) {
+    for (size_t i = 0; i < m_meshes.size(); ++i) {
         meshes += std::string("  ") + indent(m_meshes[i]->toString(), 2);
         if (i + 1 < m_meshes.size())
             meshes += ",";
@@ -105,6 +113,11 @@ std::string Scene::toString() const {
         indent(m_camera->toString()),
         indent(meshes, 2)
     );
+}
+
+Mesh *Scene::getSampledEmitter(float sample) const {
+    int i = int(sample * m_emitters.size());
+    return m_emitters[i];
 }
 
 NORI_REGISTER_CLASS(Scene, "scene");

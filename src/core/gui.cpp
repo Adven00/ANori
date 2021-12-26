@@ -125,8 +125,8 @@ void NoriScreen::draw_contents() {
     m_renderPass->resize(framebuffer_size());
     m_renderPass->begin();
     m_renderPass->set_viewport(nanogui::Vector2i(0, 0),
-                               nanogui::Vector2i(m_pixel_ratio * size[0],
-                                                 m_pixel_ratio * size[1]));
+                               nanogui::Vector2i(int(m_pixel_ratio * size[0]),
+                                                 int(m_pixel_ratio * size[1])));
     m_texture->upload((uint8_t *) m_block.data());
     m_shader->set_texture("source", m_texture);
     m_shader->begin();

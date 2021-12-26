@@ -54,6 +54,14 @@ public:
         );
     }
 
+    Point3f next3D() {
+        return Point3f(
+            m_random.nextFloat(),
+            m_random.nextFloat(),
+            m_random.nextFloat()
+        );
+    }
+
     std::string toString() const {
         return tfm::format(
             " Independent[\n"

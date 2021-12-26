@@ -83,7 +83,6 @@ public:
      *     A probability/density value expressed with respect
      *     to the specified measure
      */
-
     virtual float pdf(const BSDFQueryRecord &bRec) const = 0;
 
     /**

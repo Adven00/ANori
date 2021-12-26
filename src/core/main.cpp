@@ -93,7 +93,7 @@ static void render(Scene *scene, const std::string &filename) {
             /* Create a clone of the sampler for the current thread */
             std::unique_ptr<Sampler> sampler(scene->getSampler()->clone());
 
-            for (int i=range.begin(); i<range.end(); ++i) {
+            for (int i = range.begin(); i < range.end(); ++i) {
                 /* Request an image block from the block generator */
                 blockGenerator.next(block);
 
