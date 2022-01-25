@@ -146,11 +146,11 @@ public:
     /// Return the name of this mesh
     const std::string &getName() const { return m_name; }
 
-    /// Return the sample probability (uniform)
-    float getSamplePdf() const { return m_areaDP.getNormalization(); }
+        /// Return the sample probability (uniform)
+        float getSamplePdf() const { return m_areaDP.getNormalization(); }
 
-    /// Return the sample result (uniform)
-    std::tuple<Point3f, Vector3f> getSampleResult(const Point3f &sample) const;
+        /// Return the sample result (uniform)
+        std::tuple<Point3f, Vector3f> getSampleResult(const Point3f &sample) const;
 
     /// Return a human-readable summary of this instance
     std::string toString() const;

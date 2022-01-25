@@ -53,6 +53,9 @@ public:
     /// Check if the color vector contains a NaN/Inf/negative value
     bool isValid() const;
 
+    /// Check if the color vector consists of zero
+    bool isZero() const;
+
     /// Convert from sRGB to linear RGB
     Color3f toLinearRGB() const;
 

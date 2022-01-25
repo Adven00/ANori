@@ -41,7 +41,7 @@ void Scene::activate() {
     
     for (auto mesh : m_meshes) {
         if (mesh->isEmitter()) {
-            m_emitters.push_back(mesh);
+            m_lights.push_back(mesh);
         }
     }
 
@@ -115,9 +115,9 @@ std::string Scene::toString() const {
     );
 }
 
-Mesh *Scene::getSampledEmitter(float sample) const {
-    int i = int(sample * m_emitters.size());
-    return m_emitters[i];
+Mesh *Scene::sampleLight(float sample) const {
+    int i = int(sample * m_lights.size());
+    return m_lights[i];
 }
 
 NORI_REGISTER_CLASS(Scene, "scene");

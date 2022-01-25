@@ -20,36 +20,34 @@ public:
         }
 
         /* Direct illumination from light to camera */
-        Color3f Le(0.0f);
+        Color3f le(0.0f);
         if (its.mesh->isEmitter()) {
             EmitterQueryRecord rec(ray.o, its.mesh);
             rec.w = its.toLocal(-ray.d.normalized());
-            Le = rec.mesh->getEmitter()->eval(rec);
+            le = rec.mesh->getEmitter()->eval(rec);
         }
 
         /* Sampling the light source if diffuse */
-        if (its.mesh->getBSDF()->isDiffuse()) {
+        if (its.mesh->getBSDF() && its.mesh->getBSDF()->isDiffuse()) {
             /* Sample a light from scene (uniform) */
-            auto light = scene->getSampledEmitter(sampler->next1D());
+            auto light = scene->sampleLight(sampler->next1D());
 
             /* Direct illumination from light to mesh */
-            EmitterQueryRecord eRec(its.p, light);
-            Color3f Li = light->getEmitter()->sample(eRec, sampler->next3D());
+            EmitterQueryRecord eRec(its, light);
+            Color3f color = light->getEmitter()->sample(eRec, sampler->next3D());
 
             /* If there is occluder between light and mesh */
-            Ray3f shadowRay(eRec.p, (eRec.s - eRec.p).normalized(), Epsilon, (eRec.s - eRec.p).norm() - Epsilon);
-            Li = scene->rayIntersect(shadowRay) ? Color3f(0.f) : Li;           
+            Ray3f shadowRay(eRec.p, its.toWorld(eRec.wo), Epsilon, (eRec.s - eRec.p).norm() - Epsilon);
+            color = scene->rayIntersect(shadowRay) ? Color3f(0.f) : color;           
 
             /* Compute BSDF of the surface */
-            Vector3f wo = its.toLocal(eRec.s - eRec.p).normalized();
-            BSDFQueryRecord bRec(its.toLocal(-ray.d), wo, ESolidAngle);
-            Color3f bsdf = its.mesh->getBSDF()->eval(bRec);
+            BSDFQueryRecord bRec(its.toLocal(-ray.d), eRec.wo, ESolidAngle);
+            Color3f f = its.mesh->getBSDF()->eval(bRec);
 
-            /* Compute cosine term and probability*/
-            float cosTheta = std::max(Frame::cosTheta(wo), 0.f);
-            float pdf = 1.0f / (float)scene->getEmitters().size();
+            /* Compute light sampling probability*/
+            float pdf = 1.0f / (float)scene->getLights().size();
 
-            return Le + Li * bsdf * cosTheta / pdf;
+            return le + color * f / pdf;
 
         /* Otherwise change the ray direction */
         } else {

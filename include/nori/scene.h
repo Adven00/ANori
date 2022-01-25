@@ -47,11 +47,11 @@ public:
     /// Return a reference to an array containing all meshes
     const std::vector<Mesh *> &getMeshes() const { return m_meshes; }
 
-    /// Return a reference to an array containing all emitters
-    const std::vector<Mesh *> &getEmitters() const { return m_emitters; }
+    /// Return a reference to an array containing all lights
+    const std::vector<Mesh *> &getLights() const { return m_lights; }
 
-    /// Return a pointer to uniformly sampled emitter
-    Mesh *getSampledEmitter(float sample) const;
+        /// Return a pointer to uniformly sampled light
+        Mesh *sampleLight(float sample) const;
 
     /**
      * \brief Intersect a ray against all triangles stored in the scene
@@ -111,9 +111,10 @@ public:
     std::string toString() const;
 
     EClassType getClassType() const { return EScene; }
+    
 private:
     std::vector<Mesh *> m_meshes;
-    std::vector<Mesh *> m_emitters;
+    std::vector<Mesh *> m_lights;
 
     Integrator *m_integrator = nullptr;
     Sampler *m_sampler = nullptr;

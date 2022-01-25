@@ -196,9 +196,18 @@ Color3f Color3f::toLinearRGB() const {
 }
 
 bool Color3f::isValid() const {
-    for (int i=0; i<3; ++i) {
+    for (int i = 0; i < 3; ++i) {
         float value = coeff(i);
         if (value < 0 || !std::isfinite(value))
+            return false;
+    }
+    return true;
+}
+
+bool Color3f::isZero() const {
+    for (int i = 0; i < 3; ++i) {
+        float value = coeff(i);
+        if (value != 0.f)
             return false;
     }
     return true;

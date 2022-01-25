@@ -33,6 +33,7 @@ public:
     Color3f sample(BSDFQueryRecord &bRec, const Point2f &sample) const {
         float cosThetaI = Frame::cosTheta(bRec.wi);
         float f = fresnel(cosThetaI, m_extIOR, m_intIOR);
+        bRec.eta = m_intIOR / m_extIOR;
         bRec.measure = EDiscrete;
 
         /* Select reflection */
@@ -54,8 +55,6 @@ public:
                 Vector3f n(0.f, 0.f, 1.f);
                 Vector3f woPerp = sign * sqrt(cosThetaTSqr) * n;
                 Vector3f woPara = eta * (cosThetaI * n - bRec.wi);
-
-                bRec.eta = m_intIOR / m_extIOR;
                 bRec.wo = woPerp + woPara;
             }
         }

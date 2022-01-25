@@ -78,7 +78,6 @@ add_executable(nori
   src/core/obj.cpp
   src/core/object.cpp
   src/core/parser.cpp
-  src/core/perspective.cpp
   src/core/proplist.cpp
   src/core/rfilter.cpp
   src/core/scene.cpp
@@ -89,6 +88,9 @@ add_executable(nori
   src/integrators/normals.cpp
   src/integrators/simple.cpp
   src/integrators/whitted.cpp
+  src/integrators/path_mats.cpp
+  src/integrators/path_ems.cpp
+  src/integrators/path_mis.cpp
   src/integrators/ao.cpp
 
   # emitters
@@ -99,6 +101,9 @@ add_executable(nori
   src/materials/diffuse.cpp
   src/materials/microfacet.cpp
   src/materials/mirror.cpp
+
+  # cameras
+  src/cameras/perspective.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})

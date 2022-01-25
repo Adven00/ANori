@@ -19,16 +19,25 @@ public:
     Color3f sample(EmitterQueryRecord &eRec, const Point3f &sample) const {
         auto [s, n] = eRec.mesh->getSampleResult(sample);
         eRec.s = s;
-        eRec.w = Frame(n).toLocal(eRec.p - eRec.s).normalized();
+        eRec.w = Frame(n).toLocal((eRec.p - eRec.s).normalized());
+        eRec.wo = eRec.its.toLocal((eRec.s - eRec.p).normalized());
+        eRec.measure = ESolidAngle;
 
-        return eval(eRec) / pdf(eRec);
+        float cosTheta1 = std::max(Frame::cosTheta(eRec.wo), 0.f);
+        float cosTheta2 = std::max(Frame::cosTheta(eRec.w), 0.f);
+        float squaredNorm = (eRec.p - eRec.s).squaredNorm();
+        float pdf = eRec.mesh->getSamplePdf();
+
+        return m_radiance * cosTheta1 * cosTheta2 / (squaredNorm * pdf);
     }
 
     float pdf(const EmitterQueryRecord &eRec) const {
-        float cosTheta = std::abs(Frame::cosTheta(eRec.w));
+        float cosTheta = Frame::cosTheta(eRec.w);
+        if (cosTheta <= 0.f)
+            return 0.f;
         
         float squaredNorm = (eRec.p - eRec.s).squaredNorm();
-        return eRec.mesh->getSamplePdf() * squaredNorm / cosTheta;;
+        return eRec.mesh->getSamplePdf() * squaredNorm / cosTheta;
     }
 
     std::string toString() const {

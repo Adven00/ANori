@@ -15,16 +15,16 @@ public:
         if (!scene->rayIntersect(ray, its))
             return Color3f(0.0f);
 
-        Vector3f lightDir = (m_position - its.p).normalized();
-        Ray3f shadowRay = Ray3f(its.p, lightDir);
-        int visiblity = scene->rayIntersect(shadowRay) ? 0 : 1;
+        Vector3f wi = (m_position - its.p).normalized();
+        Ray3f shadowRay = Ray3f(its.p, wi);
+        if (scene->rayIntersect(shadowRay))
+            return Color3f(0.0f);
 
-        auto cosTheta = Frame::cosTheta(its.shFrame.toLocal(lightDir));
+        auto cosTheta = Frame::cosTheta(its.shFrame.toLocal(wi));
         float attenuation = std::max(0.f, cosTheta) / std::pow((m_position - its.p).norm(), 2.0f);
-
         Color3f color = m_energy * INV_PI * INV_FOURPI;
-        
-        return color * attenuation * visiblity;
+
+        return color * attenuation;
     }
 
     std::string toString() const {
