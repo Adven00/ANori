@@ -23,6 +23,7 @@ using namespace nori;
 
 static int threadCount = -1;
 static bool gui = true;
+static std::string savePath = "../scenes/output";
 
 static void renderBlock(const Scene *scene, Sampler *sampler, ImageBlock &block) {
     const Camera *camera = scene->getCamera();
@@ -136,111 +137,54 @@ static void render(Scene *scene, const std::string &filename) {
 
     /* Determine the filename of the output bitmap */
     std::string outputName = filename;
-    size_t lastdot = outputName.find_last_of(".");
+    size_t lastdot = filename.find_last_of(".");
+    size_t lastslash = filename.find_last_of("/");
     if (lastdot != std::string::npos)
         outputName.erase(lastdot, std::string::npos);
-
+    if (lastslash != std::string::npos)
+        outputName.erase(0, lastslash);
+    outputName = savePath + outputName; 
+    
     /* Save using the OpenEXR format */
     bitmap->saveEXR(outputName);
-
     /* Save tonemapped (sRGB) output using the PNG format */
     bitmap->savePNG(outputName);
 }
 
 int main(int argc, char **argv) {
-    if (argc < 2) {
-        cerr << "Syntax: " << argv[0] << " <scene.xml> [--no-gui] [--threads N]" <<  endl;
+    cmdline::parser a;
+    a.add<std::string>("path", 'p', "XML file path", true, "");
+    a.add<int>("threads", 't', "render threads number", false, -1, cmdline::range(1, 65535));
+    a.add("gui", '\0', "graphics interface");
+    a.parse_check(argc, argv);
+
+    threadCount = a.get<int>("threads");
+    gui = a.exist("gui");
+
+    std::string sceneName = a.get<std::string>("path");
+    filesystem::path path(sceneName);
+    if (path.extension() == "xml") {
+        /* Add the parent directory of the scene file to the
+        file resolver. That way, the XML file can reference
+        resources (OBJ files, textures) using relative paths */
+        getFileResolver()->prepend(path.parent_path());
+    } else {
+        cerr << "Error while parsing \"" << sceneName
+        << "\": expected an extension of type .xml" << endl;
         return -1;
     }
 
-    std::string sceneName = "";
-    std::string exrName = "";
-
-    for (int i = 1; i < argc; ++i) {
-        std::string token(argv[i]);
-        if (token == "-t" || token == "--threads") {
-            if (i+1 >= argc) {
-                cerr << "\"--threads\" argument expects a positive integer following it." << endl;
-                return -1;
-            }
-            threadCount = atoi(argv[i+1]);
-            i++;
-            if (threadCount <= 0) {
-                cerr << "\"--threads\" argument expects a positive integer following it." << endl;
-                return -1;
-            }
-
-            continue;
-        }
-        else if (token == "--no-gui") {
-            gui = false;
-            continue;
-        }
-
-        filesystem::path path(argv[i]);
-
-        try {
-            if (path.extension() == "xml") {
-                sceneName = argv[i];
-
-                /* Add the parent directory of the scene file to the
-                   file resolver. That way, the XML file can reference
-                   resources (OBJ files, textures) using relative paths */
-                getFileResolver()->prepend(path.parent_path());
-            } else if (path.extension() == "exr") {
-                /* Alternatively, provide a basic OpenEXR image viewer */
-                exrName = argv[i];
-            } else {
-                cerr << "Fatal error: unknown file \"" << argv[i]
-                     << "\", expected an extension of type .xml or .exr" << endl;
-            }
-        } catch (const std::exception &e) {
-            cerr << "Fatal error: " << e.what() << endl;
-            return -1;
-        }
+    if (threadCount < 0) {
+        threadCount = tbb::task_scheduler_init::automatic;
     }
-
-    if (exrName !="" && sceneName !="") {
-        cerr << "Both .xml and .exr files were provided. Please only provide one of them." << endl;
+    try {
+        std::unique_ptr<NoriObject> root(loadFromXML(sceneName));
+        /* When the XML root object is a scene, start rendering it .. */
+        if (root->getClassType() == NoriObject::EScene)
+            render(static_cast<Scene *>(root.get()), sceneName);
+    } catch (const std::exception &e) {
+        cerr << e.what() << endl;
         return -1;
     }
-    else if (exrName == "" && sceneName == "") {
-        cerr << "Please provide the path to a .xml (or .exr) file." << endl;
-        return -1;
-    }
-    else if (exrName != "") {
-        if (!gui) {
-            cerr << "Flag --no-gui was set. Please remove it to display the EXR file." << endl;
-            return -1;
-        }
-        try {
-            Bitmap bitmap(exrName);
-            ImageBlock block(Vector2i((int) bitmap.cols(), (int) bitmap.rows()), nullptr);
-            block.fromBitmap(bitmap);
-            nanogui::init();
-            NoriScreen *screen = new NoriScreen(block);
-            nanogui::mainloop(50.f);
-            delete screen;
-            nanogui::shutdown();
-        } catch (const std::exception &e) {
-            cerr << e.what() << endl;
-            return -1;
-        }
-    }
-    else { // sceneName != ""
-        if (threadCount < 0) {
-            threadCount = tbb::task_scheduler_init::automatic;
-        }
-        try {
-            std::unique_ptr<NoriObject> root(loadFromXML(sceneName));
-            /* When the XML root object is a scene, start rendering it .. */
-            if (root->getClassType() == NoriObject::EScene)
-                render(static_cast<Scene *>(root.get()), sceneName);
-        } catch (const std::exception &e) {
-            cerr << e.what() << endl;
-            return -1;
-        }
-    }
-
     return 0;
 }

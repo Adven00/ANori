@@ -3,6 +3,7 @@
 /nori
 /warptest
 /ext_build
+/scenes/output
 CMakeCache.txt
 CMakeSettings.json
 CMakeFiles

@@ -48,7 +48,7 @@ NoriObject *loadFromXML(const std::string &filename) {
         EMesh                 = NoriObject::EMesh,
         EBSDF                 = NoriObject::EBSDF,
         EPhaseFunction        = NoriObject::EPhaseFunction,
-        EEmitter            = NoriObject::EEmitter,
+        EEmitter              = NoriObject::EEmitter,
         EMedium               = NoriObject::EMedium,
         ECamera               = NoriObject::ECamera,
         EIntegrator           = NoriObject::EIntegrator,
@@ -79,7 +79,7 @@ NoriObject *loadFromXML(const std::string &filename) {
     tags["scene"]      = EScene;
     tags["mesh"]       = EMesh;
     tags["bsdf"]       = EBSDF;
-    tags["emitter"]  = EEmitter;
+    tags["emitter"]    = EEmitter;
     tags["camera"]     = ECamera;
     tags["medium"]     = EMedium;
     tags["phase"]      = EPhaseFunction;
@@ -252,9 +252,9 @@ NoriObject *loadFromXML(const std::string &filename) {
                             if (tokens.size() != 16)
                                 throw NoriException("Expected 16 values");
                             Eigen::Matrix4f matrix;
-                            for (int i=0; i<4; ++i)
-                                for (int j=0; j<4; ++j)
-                                    matrix(i, j) = toFloat(tokens[i*4+j]);
+                            for (int i = 0; i < 4; ++i)
+                                for (int j = 0; j < 4; ++j)
+                                    matrix(i, j) = toFloat(tokens[i * 4 + j]);
                             transform = Eigen::Affine3f(matrix) * transform;
                         }
                         break;

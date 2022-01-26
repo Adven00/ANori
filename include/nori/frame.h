@@ -49,6 +49,11 @@ struct Frame {
         return s * v.x() + t * v.y() + n * v.z();
     }
 
+    /// Convert from local coordinates to another coordinates
+    Vector3f toAnother(const Vector3f &v, const Frame &f) const {
+        return f.toLocal(toWorld(v));
+    }
+
     /** \brief Assuming that the given direction is in the local coordinate 
      * system, return the cosine of the angle between the normal and v */
     static float cosTheta(const Vector3f &v) {

@@ -8,6 +8,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   # tinyformat string formatting library
   ${TFM_INCLUDE_DIR}
+  # command line parser library
+  ${CMDLINE_INCLUDE_DIR}
   # Eigen linear algebra library
   SYSTEM ${EIGEN_INCLUDE_DIR}
   # OpenEXR high dynamic range bitmap library
