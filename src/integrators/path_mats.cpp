@@ -34,7 +34,7 @@ public:
                 result += its.mesh->getEmitter()->eval(eRec) * throughOutput;
             }
 
-            /* Sampling the next ray accroding to BRDF */
+            /* Sampling the next ray accroding to BSDF */
             BSDFQueryRecord bRec(its.toLocal(-nextRay.d));
             Color3f color = its.mesh->getBSDF()->sample(bRec, sampler->next2D());
             nextRay = Ray3f(its.p, its.toWorld(bRec.wo));

@@ -23,7 +23,7 @@ public:
     }
 
     float eval(float x) const {
-        float alpha = -1.0f / (2.0f * m_stddev*m_stddev);
+        float alpha = -1.0f / (2.0f * m_stddev * m_stddev);
         return std::max(0.0f, 
             std::exp(alpha * x * x) - 
             std::exp(alpha * m_radius * m_radius));

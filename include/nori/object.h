@@ -29,7 +29,9 @@ public:
         EIntegrator,
         ESampler,
         ETest,
+        ETexture2D,
         EReconstructionFilter,
+        ETextureFilter,
         EClassTypeCount
     };
 
@@ -86,6 +88,7 @@ public:
             case EIntegrator: return "integrator";
             case ESampler:    return "sampler";
             case ETest:       return "test";
+            case ETexture2D:  return "texture2D";
             default:          return "<unknown>";
         }
     }

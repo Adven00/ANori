@@ -77,7 +77,7 @@ public:
                 previousIsSpecular = true;
             }
 
-            /* Sampling the next ray accroding to BRDF */
+            /* Sampling the next ray accroding to BSDF */
             BSDFQueryRecord bRecMats(its.toLocal(-nextRay.d));
             Color3f color = its.mesh->getBSDF()->sample(bRecMats, sampler->next2D());
             nextRay = Ray3f(its.p, its.toWorld(bRecMats.wo));

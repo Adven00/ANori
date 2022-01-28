@@ -166,7 +166,7 @@ filesystem::resolver *getFileResolver() {
 Color3f Color3f::toSRGB() const {
     Color3f result;
 
-    for (int i=0; i<3; ++i) {
+    for (int i = 0; i < 3; ++i) {
         float value = coeff(i);
 
         if (value <= 0.0031308f)

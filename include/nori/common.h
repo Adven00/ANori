@@ -112,15 +112,14 @@ class BlockGenerator;
 class Camera;
 class ImageBlock;
 class Integrator;
-class KDTree;
 class Emitter;
-struct EmitterQueryRecord;
 class Mesh;
 class NoriObject;
 class NoriObjectFactory;
 class NoriScreen;
 class PhaseFunction;
 class ReconstructionFilter;
+class Texture2D;
 class Sampler;
 class Scene;
 
@@ -216,14 +215,15 @@ inline int clamp(int value, int min, int max) {
 }
 
 /// Linearly interpolate between two values
-inline float lerp(float t, float v1, float v2) {
+template <typename T>
+inline T lerp(float t, T v1, T v2) {
     return ((float) 1 - t) * v1 + t * v2;
 }
 
 /// Always-positive modulo operation
 inline int mod(int a, int b) {
     int r = a % b;
-    return (r < 0) ? r+b : r;
+    return (r < 0) ? r + b : r;
 }
 
 /// Compute a direction for the given coordinates in spherical coordinates

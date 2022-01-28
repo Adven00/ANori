@@ -66,6 +66,8 @@ add_executable(nori
   include/nori/transform.h
   include/nori/vector.h
   include/nori/warp.h
+  include/nori/texture.h
+  include/nori/tfilter.h
 
   # Source code files
   src/core/bitmap.cpp
@@ -81,7 +83,6 @@ add_executable(nori
   src/core/object.cpp
   src/core/parser.cpp
   src/core/proplist.cpp
-  src/core/rfilter.cpp
   src/core/scene.cpp
   src/core/ttest.cpp
   src/core/warp.cpp
@@ -106,6 +107,11 @@ add_executable(nori
 
   # cameras
   src/cameras/perspective.cpp
+  src/cameras/rfilter.cpp
+
+  # textures
+  src/textures/tfilter.cpp
+  src/textures/image.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})

@@ -10,6 +10,7 @@
 #include <nori/emitter.h>
 #include <nori/warp.h>
 #include <nori/dpdf.h>
+#include <nori/texture.h>
 #include <Eigen/Geometry>
 
 NORI_NAMESPACE_BEGIN
@@ -137,13 +138,18 @@ void Mesh::addChild(NoriObject *obj) {
             m_bsdf = static_cast<BSDF *>(obj);
             break;
 
-        case EEmitter: {
-                Emitter *emitter = static_cast<Emitter *>(obj);
-                if (m_emitter)
-                    throw NoriException(
-                        "Mesh: tried to register multiple Emitter instances!");
-                m_emitter = emitter;
-            }
+        case EEmitter:
+            if (m_emitter)
+                throw NoriException(
+                    "Mesh: tried to register multiple Emitter instances!");
+            m_emitter = static_cast<Emitter *>(obj);
+            break;
+
+        case ETexture2D:
+            if (m_texture)
+                throw NoriException(
+                    "Mesh: tried to register multiple texture instances!");
+            m_texture = static_cast<Texture2D *>(obj);
             break;
 
         default:
@@ -158,12 +164,14 @@ std::string Mesh::toString() const {
         "  name = \"%s\",\n"
         "  vertexCount = %i,\n"
         "  triangleCount = %i,\n"
+        "  texture = %s,\n"
         "  bsdf = %s,\n"
         "  emitter = %s\n"
         "]",
         m_name,
         m_V.cols(),
         m_F.cols(),
+        m_texture ? indent(m_texture->toString()) : std::string("null"),
         m_bsdf ? indent(m_bsdf->toString()) : std::string("null"),
         m_emitter ? indent(m_emitter->toString()) : std::string("null")
     );

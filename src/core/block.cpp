@@ -25,7 +25,7 @@ ImageBlock::ImageBlock(const Vector2i &size, const ReconstructionFilter *filter)
         }
         m_filter[NORI_FILTER_RESOLUTION] = 0.0f;
         m_lookupFactor = NORI_FILTER_RESOLUTION / m_filterRadius;
-        int weightSize = (int) std::ceil(2*m_filterRadius) + 1;
+        int weightSize = (int) std::ceil(2 * m_filterRadius) + 1;
         m_weightsX = new float[weightSize];
         m_weightsY = new float[weightSize];
         memset(m_weightsX, 0, sizeof(float) * weightSize);
@@ -33,7 +33,7 @@ ImageBlock::ImageBlock(const Vector2i &size, const ReconstructionFilter *filter)
     }
 
     /* Allocate space for pixels and border regions */
-    resize(size.y() + 2*m_borderSize, size.x() + 2*m_borderSize);
+    resize(size.y() + 2 * m_borderSize, size.x() + 2 * m_borderSize);
 }
 
 ImageBlock::~ImageBlock() {

@@ -72,7 +72,7 @@ struct Frame {
     /** \brief Assuming that the given direction is in the local coordinate
      * system, return the tangent of the angle between the normal and v */
     static float tanTheta(const Vector3f &v) {
-        float temp = 1 - v.z()*v.z();
+        float temp = 1 - v.z() * v.z();
         if (temp <= 0.0f)
             return 0.0f;
         return std::sqrt(temp) / v.z();

@@ -17,6 +17,7 @@
 
 NORI_NAMESPACE_BEGIN
 
+
 Bitmap::Bitmap(const std::string &filename) {
     Imf::InputFile file(filename.c_str());
     const Imf::Header &header = file.header();
@@ -33,7 +34,7 @@ Bitmap::Bitmap(const std::string &filename) {
         std::string name = toLower(it.name());
 
         if (it.channel().xSampling != 1 || it.channel().ySampling != 1) {
-            /* Sub-sampled layers are not supported */
+            /// Sub-sampled layers are not supported 
             continue;
         }
 
@@ -65,6 +66,7 @@ Bitmap::Bitmap(const std::string &filename) {
     file.setFrameBuffer(frameBuffer);
     file.readPixels(dw.min.y, dw.max.y);
 }
+
 
 void Bitmap::saveEXR(const std::string &filename) {
     cout << "Writing a " << cols() << "x" << rows()
