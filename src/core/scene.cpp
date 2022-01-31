@@ -116,10 +116,6 @@ std::string Scene::toString() const {
 }
 
 Mesh *Scene::sampleLight(float sample) const {
-    if (m_lights.size() == 0)
-        throw NoriException("Integrator(<%s>) requires light!",
-            classTypeName(m_integrator->getClassType()));
-
     int i = int(sample * m_lights.size());
     return m_lights[i];
 }

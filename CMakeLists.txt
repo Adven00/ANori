@@ -112,6 +112,8 @@ add_executable(nori
   # textures
   src/textures/tfilter.cpp
   src/textures/image.cpp
+  src/textures/solid.cpp
+  src/textures/procedural.cpp
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})

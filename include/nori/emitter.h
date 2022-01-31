@@ -12,6 +12,7 @@
 NORI_NAMESPACE_BEGIN
 
 struct EmitterQueryRecord {
+
     /// Sampled point on emitter
     Point3f s;
     /// Intersection point (emitted ray and mesh)

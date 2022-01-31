@@ -27,6 +27,7 @@ void Mesh::activate() {
         /* If no material was assigned, instantiate a diffuse BRDF */
         m_bsdf = static_cast<BSDF *>(
             NoriObjectFactory::createInstance("diffuse", PropertyList()));
+        m_bsdf->activate();
     }
 
     /* Initialize area distribution m_areaDP */
@@ -39,9 +40,7 @@ void Mesh::activate() {
 
 float Mesh::surfaceArea(uint32_t index) const {
     uint32_t i0 = m_F(0, index), i1 = m_F(1, index), i2 = m_F(2, index);
-
     const Point3f p0 = m_V.col(i0), p1 = m_V.col(i1), p2 = m_V.col(i2);
-
     return 0.5f * Vector3f((p1 - p0).cross(p2 - p0)).norm();
 }
 
@@ -145,13 +144,6 @@ void Mesh::addChild(NoriObject *obj) {
             m_emitter = static_cast<Emitter *>(obj);
             break;
 
-        case ETexture2D:
-            if (m_texture)
-                throw NoriException(
-                    "Mesh: tried to register multiple texture instances!");
-            m_texture = static_cast<Texture2D *>(obj);
-            break;
-
         default:
             throw NoriException("Mesh::addChild(<%s>) is not supported!",
                                 classTypeName(obj->getClassType()));
@@ -163,15 +155,13 @@ std::string Mesh::toString() const {
         "Mesh[\n"
         "  name = \"%s\",\n"
         "  vertexCount = %i,\n"
-        "  triangleCount = %i,\n"
-        "  texture = %s,\n"
+        "  triangleCount = %i,\n"      
         "  bsdf = %s,\n"
         "  emitter = %s\n"
         "]",
         m_name,
         m_V.cols(),
         m_F.cols(),
-        m_texture ? indent(m_texture->toString()) : std::string("null"),
         m_bsdf ? indent(m_bsdf->toString()) : std::string("null"),
         m_emitter ? indent(m_emitter->toString()) : std::string("null")
     );

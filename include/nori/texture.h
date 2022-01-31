@@ -1,40 +1,47 @@
 #pragma once
 
 #include <nori/object.h>
+#include <nori/bitmap.h>
+#include <map>
 
 NORI_NAMESPACE_BEGIN
 
 /**
  * \brief Abstract 2D texture
  */
-class Texture2D : public NoriObject {
+class Texture : public NoriObject {
 public:
-    /**
-     * \brief Return the texture value at \c uv     
-     */
+    /// Return the texture value at uv     
     virtual Color3f eval(const Point2f &uv) const = 0;
 
-    /**
-     * \brief Return a bitmap representation of the texture
-     */
-    virtual const Bitmap *getBitmap() const = 0;
+    /// Return a bitmap representation of the texture
+    virtual const Bitmap *getBitmap() = 0;
 
-    /**
-     * \brief Return the type of object (i.e. Mesh/Camera/etc.) 
-     * provided by this instance
-     * */
-    EClassType getClassType() const { return ETexture2D; }
+    /// Return texture use
+    ETextureUse getTextureUse() const { return m_use; }
+
+    /// Return class type
+    EClassType getClassType() const { return ETexture; }
+
+    Texture(const PropertyList &propList) { 
+        std::string use = propList.getString("use", "diffuse");
+
+        std::map<std::string, ETextureUse> textures;
+        textures["diffuse"] = ETextureUse::EDiffuse;
+
+        auto it = textures.find(use);
+        if (it == textures.end()) 
+            throw NoriException("Texture: unexpected texture use \"%s\"", use);
+        m_use = it->second;
+    }
+
+    ~Texture() { 
+        if (m_bitmap) delete m_bitmap; 
+    }
 
 protected:
-    Point2f m_uvOffset;
-    Vector2i m_uvScale;
-
-    Point2f uvToTextureCoord(const Point2f &uv) const {
-        return Point2f(
-            uv.x() * m_uvScale.x() + m_uvOffset.x(),
-            uv.y() * m_uvScale.y() + m_uvOffset.y()
-        );
-    }
+    Bitmap *m_bitmap = nullptr;
+    ETextureUse m_use;
 };
 
 NORI_NAMESPACE_END

@@ -126,6 +126,8 @@ bool Accel::rayIntersect(const Ray3f &ray_, Intersection &its, bool shadowRay) c
             its.uv = bary.x() * UV.col(idx0) +
                 bary.y() * UV.col(idx1) +
                 bary.z() * UV.col(idx2);
+        else 
+            its.uv = Point2f(0.f, 0.f);
 
         /* Compute the geometry frame */
         its.geoFrame = Frame((p1 - p0).cross(p2 - p0).normalized());

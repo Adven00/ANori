@@ -30,7 +30,7 @@ public:
         : Base(size.y(), size.x()) { }
 
     /// Load an OpenEXR file with the specified filename
-    Bitmap(const std::string &filename);
+    /// Bitmap(const std::string &filename);
 
     /// Save the bitmap as an EXR file with the specified filename
     void saveEXR(const std::string &filename);

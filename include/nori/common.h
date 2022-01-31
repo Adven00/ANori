@@ -119,7 +119,7 @@ class NoriObjectFactory;
 class NoriScreen;
 class PhaseFunction;
 class ReconstructionFilter;
-class Texture2D;
+class Texture;
 class Sampler;
 class Scene;
 
@@ -182,6 +182,11 @@ enum EMeasure {
     EDiscrete
 };
 
+/// Differnet texture use
+enum ETextureUse {
+    EDiffuse = 0
+};
+
 //// Convert radians to degrees
 inline float radToDeg(float value) { return value * (180.0f / M_PI); }
 
@@ -217,7 +222,7 @@ inline int clamp(int value, int min, int max) {
 /// Linearly interpolate between two values
 template <typename T>
 inline T lerp(float t, T v1, T v2) {
-    return ((float) 1 - t) * v1 + t * v2;
+    return (1.f - t) * v1 + t * v2;
 }
 
 /// Always-positive modulo operation

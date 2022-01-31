@@ -15,9 +15,7 @@ NORI_NAMESPACE_BEGIN
  */
 class Diffuse : public BSDF {
 public:
-    Diffuse(const PropertyList &propList) {
-        m_albedo = propList.getColor("albedo", Color3f(0.5f));
-    }
+    Diffuse(const PropertyList &propList) { }
 
     /// Evaluate the BRDF model
     Color3f eval(const BSDFQueryRecord &bRec) const {
@@ -29,7 +27,7 @@ public:
             return Color3f(0.0f);
 
         /* The BRDF is simply the albedo / pi */
-        return m_albedo * INV_PI;
+        return m_textures.at(EDiffuse)->eval(bRec.its.uv) * INV_PI;
     }
 
     /// Compute the density of \ref sample() wrt. solid angles
@@ -67,26 +65,53 @@ public:
 
         /* eval() / pdf() * cos(theta) = albedo. There
            is no need to call these functions. */
-        return m_albedo;
+        return m_textures.at(EDiffuse)->eval(bRec.its.uv);
     }
 
     bool isDiffuse() const {
         return true;
     }
 
+    void activate() { 
+        if (m_textures.empty()) {
+            /* If no texture was assigned, instantiate a solid diffuse texture */
+            m_textures[EDiffuse] = static_cast<Texture *>(
+            NoriObjectFactory::createInstance("solid", PropertyList()));
+        }
+    }
+
+    void addChild(NoriObject *obj) {
+        if (obj->getClassType() != ETexture)
+            throw NoriException("BSDF::Diffuse::addChild(<%s>) is not supported!",
+                                classTypeName(obj->getClassType()));
+
+        Texture *texture = static_cast<Texture *>(obj);
+        ETextureUse use = texture->getTextureUse();
+
+        if (use != EDiffuse || m_textures.find(use) != m_textures.end())
+            throw NoriException(
+                "BSDF::Diffuse: tried to register unmatch Texture instances!");
+        m_textures[use] = texture;
+    }
+
     /// Return a human-readable summary
     std::string toString() const {
+        std::string textures;
+        for (auto it : m_textures) {
+            textures += std::string("  ") + indent(it.second->toString(), 2);
+            textures += ",\n";
+        }
+
         return tfm::format(
             "Diffuse[\n"
-            "  albedo = %s\n"
+            "  textures = {\n"
+            "  %s  }\n"
             "]", 
-            m_albedo.toString()
+            indent(textures)
         );
     }
 
     EClassType getClassType() const { return EBSDF; }
-private:
-    Color3f m_albedo;
 };
 
 NORI_REGISTER_CLASS(Diffuse, "diffuse");

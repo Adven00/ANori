@@ -1,5 +1,4 @@
 #include <nori/texture.h>
-#include <nori/bitmap.h>
 #include <nori/tfilter.h>
 #include <filesystem/resolver.h>
 #include <fstream>
@@ -9,30 +8,28 @@
 
 NORI_NAMESPACE_BEGIN
 
-class ImageTexture : public Texture2D {
+class ImageTexture : public Texture {
 public:
     typedef unsigned char uchar;
 
-    ImageTexture(const PropertyList &propList) {
+    ImageTexture(const PropertyList &propList) : Texture(propList) {
         filesystem::path filename =
             getFileResolver()->resolve(propList.getString("filename"));
 
         /* Supported format */
         std::string ext = filename.extension();
-        std::vector<std::string> support = {"png", "jpg", "tga", "bmp"};
+        std::vector<std::string> support = {"png", "jpg", "tga", "bmp", "psd"};
         if (std::find(support.begin(), support.end(), ext) == support.end())
-            throw NoriException("Texture format \"%s\" is not supported !", ext);
+            throw NoriException("unexpected texture format \"%s\"", ext);
 
         std::ifstream is(filename.str());
         if (is.fail())
-            throw NoriException("Unable to open texture \"%s\"!", filename);
+            throw NoriException("unable to open \"%s\"!", filename);
 
         int x, y, n;
         uchar *rgb8 = stbi_load(filename.str().c_str(), &x, &y, &n, 3);
-        m_uvScale = Vector2i(x, y);
-        m_uvOffset = Point2f(-0.5f);
-        m_name = filename.str();
-        m_bitmap = new Bitmap(m_uvScale);
+        m_filename = filename.str();
+        m_bitmap = new Bitmap(Point2i(x, y));
 
         auto dst = rgb8;
         for (int i = 0; i < m_bitmap->rows(); ++i) {
@@ -47,15 +44,12 @@ public:
         stbi_image_free(rgb8);
     }
 
-    ~ImageTexture() {
-        delete m_bitmap;
-    }
-
     Color3f eval(const Point2f &uv) const {
-        return m_tfilter->eval(uvToTextureCoord(uv), m_bitmap);
+        int x = int(m_bitmap->cols()), y = int(m_bitmap->rows());
+        return m_tfilter->eval(uv, Vector2i(x, y), Point2f(-0.5f), m_bitmap);
     }
 
-    const Bitmap *getBitmap() const {
+    const Bitmap *getBitmap() {
         return m_bitmap;
     }
 
@@ -63,12 +57,12 @@ public:
         switch (obj->getClassType()) {
             case ETextureFilter:
                 if (m_tfilter)
-                    throw NoriException("Texture2D: tried to register multiple texture filters!");
+                    throw NoriException("Texture: tried to register multiple texture filters!");
                 m_tfilter = static_cast<TextureFilter *>(obj);
                 break;
 
             default:
-                throw NoriException("Texture2D::addChild(<%s>) is not supported!",
+                throw NoriException("Texture::addChild(<%s>) is not supported!",
                     classTypeName(obj->getClassType()));
         }
     }
@@ -80,21 +74,11 @@ public:
     }
 
     std::string toString() const {
-        return tfm::format(
-            "ImageTexture[\n"
-            "  name = \"%s\",\n"
-            "  filter = %s\n"
-            "]",
-            m_name,
-            m_tfilter ? indent(m_tfilter->toString()) : std::string("null")
-        );
+        return tfm::format("ImageTexture[filename=\"%s\"]", m_filename);
     }
-    
 
 private:
-    // mipmap
-    std::string    m_name;
-    Bitmap        *m_bitmap  = nullptr;
+    std::string    m_filename;
     TextureFilter *m_tfilter = nullptr;
 };
 

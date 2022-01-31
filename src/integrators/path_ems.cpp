@@ -54,7 +54,7 @@ public:
                 Ray3f shadowRay(eRec.p, its.toWorld(eRec.wo), Epsilon, (eRec.s - eRec.p).norm() - Epsilon);
                 if (!scene->rayIntersect(shadowRay)) {
                     /* Compute BSDF */
-                    BSDFQueryRecord bRecDirect(its.toLocal(-nextRay.d), eRec.wo, ESolidAngle);
+                    BSDFQueryRecord bRecDirect(its.toLocal(-nextRay.d), eRec.wo, ESolidAngle, its);
                     Color3f f = its.mesh->getBSDF()->eval(bRecDirect);
                 
                     float pdf = 1 / (float)(scene->getLights().size());
@@ -66,7 +66,7 @@ public:
             }
 
             /* Sampling the next ray accroding to BRDF */
-            BSDFQueryRecord bRec(its.toLocal(-nextRay.d));
+            BSDFQueryRecord bRec(its.toLocal(-nextRay.d), its);
             Color3f color = its.mesh->getBSDF()->sample(bRec, sampler->next2D());
             nextRay = Ray3f(its.p, its.toWorld(bRec.wo));
 

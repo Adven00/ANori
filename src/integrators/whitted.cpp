@@ -41,7 +41,7 @@ public:
             color = scene->rayIntersect(shadowRay) ? Color3f(0.f) : color;           
 
             /* Compute BSDF of the surface */
-            BSDFQueryRecord bRec(its.toLocal(-ray.d), eRec.wo, ESolidAngle);
+            BSDFQueryRecord bRec(its.toLocal(-ray.d), eRec.wo, ESolidAngle, its);
             Color3f f = its.mesh->getBSDF()->eval(bRec);
 
             /* Compute light sampling probability*/
@@ -51,7 +51,7 @@ public:
 
         /* Otherwise change the ray direction */
         } else {
-            BSDFQueryRecord bRec(its.toLocal(-ray.d));
+            BSDFQueryRecord bRec(its.toLocal(-ray.d), its);
             Color3f color = its.mesh->getBSDF()->sample(bRec, sampler->next2D());
 
             /* Using russian roulette to control the recursion depth */

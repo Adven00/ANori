@@ -35,7 +35,7 @@ public:
             }
 
             /* Sampling the next ray accroding to BSDF */
-            BSDFQueryRecord bRec(its.toLocal(-nextRay.d));
+            BSDFQueryRecord bRec(its.toLocal(-nextRay.d), its);
             Color3f color = its.mesh->getBSDF()->sample(bRec, sampler->next2D());
             nextRay = Ray3f(its.p, its.toWorld(bRec.wo));
 

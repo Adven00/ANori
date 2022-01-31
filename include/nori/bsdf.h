@@ -7,6 +7,8 @@
 #pragma once
 
 #include <nori/object.h>
+#include <nori/texture.h>
+#include <nori/mesh.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -24,17 +26,20 @@ struct BSDFQueryRecord {
     /// Relative refractive index in the sampled direction
     float eta;
 
+    /// Reference to the underlying surface interaction
+    const Intersection &its;
+
     /// Measure associated with the sample
     EMeasure measure;
 
     /// Create a new record for sampling the BSDF
-    BSDFQueryRecord(const Vector3f &wi)
-        : wi(wi), eta(1.f), measure(EUnknownMeasure) { }
+    BSDFQueryRecord(const Vector3f &wi, const Intersection &its)
+        : wi(wi), eta(1.f), measure(EUnknownMeasure), its(its) { }
 
     /// Create a new record for querying the BSDF
     BSDFQueryRecord(const Vector3f &wi,
-            const Vector3f &wo, EMeasure measure)
-        : wi(wi), wo(wo), eta(1.f), measure(measure) { }
+            const Vector3f &wo, EMeasure measure, const Intersection &its)
+        : wi(wi), wo(wo), eta(1.f), measure(measure), its(its) { }
 };
 
 /**
@@ -42,6 +47,8 @@ struct BSDFQueryRecord {
  */
 class BSDF : public NoriObject {
 public:
+    typedef std::map<ETextureUse, Texture *> TextureMap;
+    
     /**
      * \brief Sample the BSDF and return the importance weight (i.e. the
      * value of the BSDF * cos(theta_o) divided by the probability density
@@ -92,11 +99,25 @@ public:
     EClassType getClassType() const { return EBSDF; }
 
     /**
+     * \brief Return the texture of the given type
+     * */
+    const Texture *getTexture(ETextureUse type) const { return m_textures.at(type); }
+
+    /**
      * \brief Return whether or not this BRDF is diffuse. This
      * is primarily used by photon mapping to decide whether
      * or not to store photons on a surface
      */
     virtual bool isDiffuse() const { return false; }
+
+    ~BSDF() {
+        for (auto it : m_textures) {
+            if (it.second) delete it.second;
+        }
+    }
+
+protected:
+    TextureMap  m_textures;
 };
 
 NORI_NAMESPACE_END

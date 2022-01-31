@@ -134,9 +134,6 @@ public:
     /// Return a pointer to an attached area emitter instance
     Emitter *getEmitter() { return m_emitter; }
 
-    /// Return a pointer to an attached texture instance
-    Texture2D *getTexture() { return m_texture; }
-
     /// Return a pointer to an attached area emitter instance (const version)
     const Emitter *getEmitter() const { return m_emitter; }
 
@@ -175,11 +172,10 @@ protected:
     MatrixXf      m_N;                   ///< Vertex normals
     MatrixXf      m_UV;                  ///< Vertex texture coordinates
     MatrixXu      m_F;                   ///< Faces
-    BSDF         *m_bsdf = nullptr;      ///< BSDF of the surface
-    Emitter      *m_emitter = nullptr;   ///< Associated emitter, if any
-    Texture2D    *m_texture = nullptr;   ///< Associated emitter, if any
     BoundingBox3f m_bbox;                ///< Bounding box of the mesh
     DiscretePDF   m_areaDP;              ///< Distribution of surface area
+    BSDF         *m_bsdf = nullptr;      ///< BSDF of the surface
+    Emitter      *m_emitter = nullptr;   ///< Associated emitter, if any
 };
 
 NORI_NAMESPACE_END

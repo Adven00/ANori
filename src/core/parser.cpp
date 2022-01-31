@@ -56,7 +56,7 @@ NoriObject *loadFromXML(const std::string &filename) {
         ETest                 = NoriObject::ETest,
         EReconstructionFilter = NoriObject::EReconstructionFilter,
         ETextureFilter        = NoriObject::ETextureFilter,
-        ETexture2D            = NoriObject::ETexture2D,
+        ETexture              = NoriObject::ETexture,
 
         /* Properties */
         EBoolean = NoriObject::EClassTypeCount,
@@ -90,7 +90,7 @@ NoriObject *loadFromXML(const std::string &filename) {
     tags["rfilter"]    = EReconstructionFilter;
     tags["tfilter"]    = ETextureFilter;
     tags["test"]       = ETest;
-    tags["texture"]    = ETexture2D;
+    tags["texture"]    = ETexture;
     tags["boolean"]    = EBoolean;
     tags["integer"]    = EInteger;
     tags["float"]      = EFloat;

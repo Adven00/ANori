@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 
 <scene>
-	<integrator type="path_mats"/>
+	<integrator type="path_mis"/>
 
 	<camera type="perspective">
 		<float name="fov" value="27.7856"/>
@@ -15,15 +15,12 @@
 	</camera>
 
 	<sampler type="independent">
-		<integer name="sampleCount" value="512"/>
+		<integer name="sampleCount" value="100"/>
 	</sampler>
 
 	<mesh type="obj">
 		<string name="filename" value="meshes/walls.obj"/>
-
-		<bsdf type="diffuse">
-			<color name="albedo" value="0.725 0.71 0.68"/>
-		</bsdf>
+		<bsdf type="diffuse"/>
 	</mesh>
 
 	<mesh type="obj">
@@ -45,15 +42,23 @@
 	</mesh>
 
 	<mesh type="obj">
-		<string name="filename" value="meshes/sphere1.obj"/>
-
-		<bsdf type="mirror"/>
+		<string name="filename" value="meshes/sphere1_.obj"/>
+        <bsdf type="diffuse">
+            <texture type="image">
+                <string name="filename" value="textures/grid.png"/>
+            </texture>
+		</bsdf>
 	</mesh>
 
 	<mesh type="obj">
-		<string name="filename" value="meshes/sphere2.obj"/>
-
-		<bsdf type="dielectric"/>
+		<string name="filename" value="meshes/sphere2_.obj"/>
+        <bsdf type="diffuse">
+            <texture type="image">
+                <string name="filename" value="textures/grid.png"/>
+                <!--<string name="use" value="diffuse"/>-->
+                <!--<tfilter type="bilinear"/>-->
+            </texture>
+		</bsdf>
 	</mesh>
 
 	<mesh type="obj">
