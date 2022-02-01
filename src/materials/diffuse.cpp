@@ -7,6 +7,7 @@
 #include <nori/bsdf.h>
 #include <nori/frame.h>
 #include <nori/warp.h>
+#include <nori/texture.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -38,7 +39,6 @@ public:
             || Frame::cosTheta(bRec.wi) <= 0
             || Frame::cosTheta(bRec.wo) <= 0)
             return 0.0f;
-
 
         /* Importance sampling density wrt. solid angles:
            cos(theta) / pi.
@@ -73,25 +73,11 @@ public:
     }
 
     void activate() { 
-        if (m_textures.empty()) {
+        if (m_textures.find(EDiffuse) == m_textures.end()) {
             /* If no texture was assigned, instantiate a solid diffuse texture */
             m_textures[EDiffuse] = static_cast<Texture *>(
             NoriObjectFactory::createInstance("solid", PropertyList()));
         }
-    }
-
-    void addChild(NoriObject *obj) {
-        if (obj->getClassType() != ETexture)
-            throw NoriException("BSDF::Diffuse::addChild(<%s>) is not supported!",
-                                classTypeName(obj->getClassType()));
-
-        Texture *texture = static_cast<Texture *>(obj);
-        ETextureUse use = texture->getTextureUse();
-
-        if (use != EDiffuse || m_textures.find(use) != m_textures.end())
-            throw NoriException(
-                "BSDF::Diffuse: tried to register unmatch Texture instances!");
-        m_textures[use] = texture;
     }
 
     /// Return a human-readable summary

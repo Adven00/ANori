@@ -7,7 +7,6 @@
 #pragma once
 
 #include <nori/object.h>
-#include <nori/texture.h>
 #include <nori/mesh.h>
 
 NORI_NAMESPACE_BEGIN
@@ -110,11 +109,9 @@ public:
      */
     virtual bool isDiffuse() const { return false; }
 
-    ~BSDF() {
-        for (auto it : m_textures) {
-            if (it.second) delete it.second;
-        }
-    }
+    virtual void addChild(NoriObject *child);
+
+    ~BSDF();
 
 protected:
     TextureMap  m_textures;

@@ -86,6 +86,8 @@ add_executable(nori
   src/core/scene.cpp
   src/core/ttest.cpp
   src/core/warp.cpp
+  src/core/bsdf.cpp
+  src/core/texture.cpp
 
   # intergrators
   src/integrators/normals.cpp

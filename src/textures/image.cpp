@@ -1,5 +1,6 @@
 #include <nori/texture.h>
 #include <nori/tfilter.h>
+#include <nori/bitmap.h>
 #include <filesystem/resolver.h>
 #include <fstream>
 

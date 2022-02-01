@@ -59,14 +59,12 @@ void Scene::addChild(NoriObject *obj) {
             }
             break;
         
-        
         case EEmitter: {
                 //Emitter *emitter = static_cast<Emitter *>(obj);
                 throw NoriException("Scene::addChild(): You need to implement this for emitters");
             }
             break;
         
-
         case ESampler:
             if (m_sampler)
                 throw NoriException("There can only be one sampler per scene!");

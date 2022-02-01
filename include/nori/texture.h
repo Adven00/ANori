@@ -1,13 +1,13 @@
 #pragma once
 
 #include <nori/object.h>
-#include <nori/bitmap.h>
-#include <map>
 
 NORI_NAMESPACE_BEGIN
 
 /**
- * \brief Abstract 2D texture
+ * \brief Abstract 2D texture. Subclass type (image, solid, etc.) 
+ * means where the texture infomation comes from, and ETextureUse
+ * means where the texture wiil be used for (diffuse, environment, etc.)
  */
 class Texture : public NoriObject {
 public:
@@ -23,21 +23,9 @@ public:
     /// Return class type
     EClassType getClassType() const { return ETexture; }
 
-    Texture(const PropertyList &propList) { 
-        std::string use = propList.getString("use", "diffuse");
+    Texture(const PropertyList &propList);
 
-        std::map<std::string, ETextureUse> textures;
-        textures["diffuse"] = ETextureUse::EDiffuse;
-
-        auto it = textures.find(use);
-        if (it == textures.end()) 
-            throw NoriException("Texture: unexpected texture use \"%s\"", use);
-        m_use = it->second;
-    }
-
-    ~Texture() { 
-        if (m_bitmap) delete m_bitmap; 
-    }
+    ~Texture();
 
 protected:
     Bitmap *m_bitmap = nullptr;

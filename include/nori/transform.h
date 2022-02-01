@@ -53,7 +53,7 @@ public:
 
     /// Apply the homogeneous transformation to a 3D vector
     Vector3f operator*(const Vector3f &v) const {
-        return m_transform.topLeftCorner<3,3>() * v;
+        return m_transform.topLeftCorner<3, 3>() * v;
     }
 
     /// Apply the homogeneous transformation to a 3D normal

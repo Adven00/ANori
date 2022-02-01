@@ -1,4 +1,5 @@
 #include <nori/texture.h>
+#include <nori/bitmap.h>
 
 NORI_NAMESPACE_BEGIN
 
