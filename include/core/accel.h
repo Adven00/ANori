@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <nori/mesh.h>
+#include <objects/mesh.h>
 
 NORI_NAMESPACE_BEGIN
 

@@ -4,10 +4,10 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/bsdf.h>
-#include <nori/frame.h>
-#include <nori/warp.h>
-#include <nori/texture.h>
+#include <objects/bsdf.h>
+#include <tools/frame.h>
+#include <core/warp.h>
+#include <objects/texture.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -28,7 +28,7 @@ public:
             return Color3f(0.0f);
 
         /* The BRDF is simply the albedo / pi */
-        return m_textures.at(EDiffuse)->eval(bRec.its.uv) * INV_PI;
+        return m_textures.at(EAlbedo)->eval(bRec.its.uv) * INV_PI;
     }
 
     /// Compute the density of \ref sample() wrt. solid angles
@@ -65,7 +65,7 @@ public:
 
         /* eval() / pdf() * cos(theta) = albedo. There
            is no need to call these functions. */
-        return m_textures.at(EDiffuse)->eval(bRec.its.uv);
+        return m_textures.at(EAlbedo)->eval(bRec.its.uv);
     }
 
     bool isDiffuse() const {
@@ -73,10 +73,13 @@ public:
     }
 
     void activate() { 
-        if (m_textures.find(EDiffuse) == m_textures.end()) {
-            /* If no texture was assigned, instantiate a solid diffuse texture */
-            m_textures[EDiffuse] = static_cast<Texture *>(
-            NoriObjectFactory::createInstance("solid", PropertyList()));
+        if (m_textures.find(EAlbedo) == m_textures.end()) {
+            /* If no texture was assigned, instantiate a solid albedo texture */
+            PropertyList pl;
+            pl.setColor("value", Color3f(0.5f));
+            pl.setString("use", "albedo");
+            m_textures[EAlbedo] = static_cast<Texture *>(
+                NoriObjectFactory::createInstance("solid", pl));
         }
     }
 
@@ -85,7 +88,9 @@ public:
         std::string textures;
         for (auto it : m_textures) {
             textures += std::string("  ") + indent(it.second->toString(), 2);
-            textures += ",\n";
+            if (it.second != (--m_textures.end())->second)
+                textures += ",";
+            textures += "\n";
         }
 
         return tfm::format(

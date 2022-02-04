@@ -4,8 +4,8 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/gui.h>
-#include <nori/block.h>
+#include <core/gui.h>
+#include <core/block.h>
 #include <nanogui/shader.h>
 #include <nanogui/label.h>
 #include <nanogui/slider.h>

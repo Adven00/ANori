@@ -1,6 +1,6 @@
-#include <nori/integrator.h>
-#include <nori/scene.h>
-#include <nori/warp.h>
+#include <objects/integrator.h>
+#include <objects/scene.h>
+#include <core/warp.h>
 
 NORI_NAMESPACE_BEGIN
 

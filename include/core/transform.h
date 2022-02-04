@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/common.h>
-#include <nori/ray.h>
+#include <core/common.h>
+#include <core/ray.h>
 
 NORI_NAMESPACE_BEGIN
 

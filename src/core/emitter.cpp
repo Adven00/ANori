@@ -1,11 +1,11 @@
-#include <objects/bsdf.h>
+#include <objects/emitter.h>
 #include <objects/texture.h>
 
 NORI_NAMESPACE_BEGIN
 
-void BSDF::addChild(NoriObject *obj) {
+void Emitter::addChild(NoriObject *obj) {
     if (obj->getClassType() != ETexture)
-        throw NoriException("BSDF::addChild(<%s>) is not supported!",
+        throw NoriException("Emitter::addChild(<%s>) is not supported!",
                             classTypeName(obj->getClassType()));
 
     Texture *texture = static_cast<Texture *>(obj);
@@ -13,16 +13,16 @@ void BSDF::addChild(NoriObject *obj) {
 
     if (m_textures.find(use) != m_textures.end())
         throw NoriException(
-            "BSDF: tried to register multiple Texture instances!");
+            "Emitter: tried to register multiple Texture instances!");
 
     if (use == EUnknownUse)
         throw NoriException(
-            "BSDF: tried to register Texture instance with unkonwn use!");
+            "Emitter: tried to register Texture instance with unkonwn use!");
 
     m_textures[use] = texture;
 }
 
-BSDF::~BSDF() {
+Emitter::~Emitter() {
     for (auto it : m_textures) {
         if (it.second) delete it.second;
     }

@@ -4,10 +4,10 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/block.h>
-#include <nori/bitmap.h>
-#include <nori/rfilter.h>
-#include <nori/bbox.h>
+#include <core/block.h>
+#include <core/bitmap.h>
+#include <objects/rfilter.h>
+#include <tools/bbox.h>
 #include <tbb/tbb.h>
 
 NORI_NAMESPACE_BEGIN

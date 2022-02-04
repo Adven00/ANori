@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/object.h>
-#include <nori/mesh.h>
+#include <objects/object.h>
+#include <objects/mesh.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -40,6 +40,8 @@ struct EmitterQueryRecord {
 
 class Emitter : public NoriObject {
 public:
+    typedef std::map<ETextureUse, Texture *> TextureMap;
+
     /** Compute the 'le' term in rendering equation
      * the radiance it emits to -eRec.wi
      * */
@@ -55,10 +57,22 @@ public:
     virtual Color3f sample(EmitterQueryRecord &eRec, const Point3f &sample) const = 0;
 
     /**
+     * \brief Return the texture of the given type
+     * */
+    const Texture *getTexture(ETextureUse type) const { return m_textures.at(type); }
+
+    /**
      * \brief Return the type of object (i.e. Mesh/Emitter/etc.) 
      * provided by this instance
      * */
     EClassType getClassType() const { return EEmitter; }
+
+    virtual void addChild(NoriObject *child);
+
+    ~Emitter();
+
+protected:
+    TextureMap  m_textures;
 };
 
 NORI_NAMESPACE_END

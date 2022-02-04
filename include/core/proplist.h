@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/color.h>
-#include <nori/transform.h>
+#include <core/color.h>
+#include <core/transform.h>
 #include <map>
 
 NORI_NAMESPACE_BEGIN

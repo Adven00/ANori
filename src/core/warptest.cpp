@@ -4,9 +4,9 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/warp.h>
-#include <nori/bsdf.h>
-#include <nori/vector.h>
+#include <core/warp.h>
+#include <objects/bsdf.h>
+#include <core/vector.h>
 #include <nanogui/screen.h>
 #include <nanogui/label.h>
 #include <nanogui/window.h>

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/object.h>
-#include <nori/mesh.h>
+#include <objects/object.h>
+#include <objects/mesh.h>
 
 NORI_NAMESPACE_BEGIN
 

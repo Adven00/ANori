@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/common.h>
-#include <nori/sampler.h>
+#include <core/common.h>
+#include <objects/sampler.h>
 
 NORI_NAMESPACE_BEGIN
 

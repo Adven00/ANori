@@ -1,5 +1,5 @@
-#include <nori/integrator.h>
-#include <nori/scene.h>
+#include <objects/integrator.h>
+#include <objects/scene.h>
 
 NORI_NAMESPACE_BEGIN
 

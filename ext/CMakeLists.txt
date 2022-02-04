@@ -157,7 +157,7 @@ set_property(TARGET pugixml PROPERTY
 set_property(TARGET pugixml PROPERTY FOLDER "dependencies")
 
 # Disable eigen warning
-add_compile_definitions(_SILENCE_CXX17_ADAPTOR_TYPEDEFS_DEPRECATION_WARNING)
+add_definitions(-D_SILENCE_CXX17_ADAPTOR_TYPEDEFS_DEPRECATION_WARNING)
 
 set(OPENEXR_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/openexr/IlmBase/Imath

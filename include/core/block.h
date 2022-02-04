@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include <nori/color.h>
-#include <nori/vector.h>
+#include <core/color.h>
+#include <core/vector.h>
 #include <tbb/mutex.h>
 
 #define NORI_BLOCK_SIZE 32 /* Block size used for parallelization */

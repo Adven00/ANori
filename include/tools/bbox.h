@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <nori/ray.h>
+#include <core/ray.h>
 
 NORI_NAMESPACE_BEGIN
 

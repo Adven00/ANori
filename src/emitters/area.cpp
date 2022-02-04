@@ -1,5 +1,5 @@
-#include <nori/emitter.h>
-#include <nori/sampler.h>
+#include <objects/emitter.h>
+#include <objects/texture.h>
 
 NORI_NAMESPACE_BEGIN
 
@@ -40,12 +40,32 @@ public:
         return eRec.mesh->getSamplePdf() * squaredNorm / cosTheta;
     }
 
+     void activate() { 
+        if (m_textures.find(ERadiance) == m_textures.end()) {
+            /* If no texture was assigned, instantiate a solid radiance texture */
+            PropertyList pl;
+            pl.setColor("value", Color3f(40.f));
+            pl.setString("use", "radiance");
+            m_textures[ERadiance] = static_cast<Texture *>(
+                NoriObjectFactory::createInstance("solid", pl));
+        }
+    }
+
     std::string toString() const {
+        std::string textures;
+        for (auto it : m_textures) {
+            textures += std::string("  ") + indent(it.second->toString(), 2);
+            if (it.second != (--m_textures.end())->second)
+                textures += ",";
+            textures += "\n";
+        }
+
         return tfm::format(
             "AreaLight[\n"
-            "  radiance = %s\n"
-            "]",
-            m_radiance.toString()
+            "  textures = {\n"
+            "  %s  }\n"
+            "]", 
+            indent(textures)
         );
     }
 };

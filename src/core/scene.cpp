@@ -4,12 +4,12 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/scene.h>
-#include <nori/bitmap.h>
-#include <nori/integrator.h>
-#include <nori/sampler.h>
-#include <nori/camera.h>
-#include <nori/emitter.h>
+#include <objects/scene.h>
+#include <core/bitmap.h>
+#include <objects/integrator.h>
+#include <objects/sampler.h>
+#include <objects/camera.h>
+#include <objects/emitter.h>
 
 NORI_NAMESPACE_BEGIN
 

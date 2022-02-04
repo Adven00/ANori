@@ -4,8 +4,8 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/parser.h>
-#include <nori/proplist.h>
+#include <core/parser.h>
+#include <core/proplist.h>
 #include <Eigen/Geometry>
 #include <pugixml.hpp>
 #include <fstream>

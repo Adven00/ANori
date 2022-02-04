@@ -4,7 +4,7 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/object.h>
+#include <objects/object.h>
 #include <Eigen/Geometry>
 #include <Eigen/LU>
 #include <filesystem/resolver.h>

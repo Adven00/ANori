@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include <nori/accel.h>
-#include <nori/dpdf.h>
+#include <core/accel.h>
+#include <tools/dpdf.h>
 
 NORI_NAMESPACE_BEGIN
 

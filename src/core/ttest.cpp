@@ -4,11 +4,11 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/scene.h>
-#include <nori/bsdf.h>
-#include <nori/camera.h>
-#include <nori/integrator.h>
-#include <nori/sampler.h>
+#include <objects/scene.h>
+#include <objects/bsdf.h>
+#include <objects/camera.h>
+#include <objects/integrator.h>
+#include <objects/sampler.h>
 #include <hypothesis.h>
 #include <pcg32.h>
 

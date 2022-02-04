@@ -4,7 +4,7 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/proplist.h>
+#include <core/proplist.h>
 
 NORI_NAMESPACE_BEGIN
 

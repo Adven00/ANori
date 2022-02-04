@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <nori/vector.h>
+#include <core/vector.h>
 
 NORI_NAMESPACE_BEGIN
 

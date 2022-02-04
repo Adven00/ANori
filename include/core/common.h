@@ -185,7 +185,12 @@ enum EMeasure {
 /// Differnet texture use
 enum ETextureUse {
     EUnknownUse = 0,
-    EDiffuse
+    EAlbedo,
+    ERadiance,
+    EMetalness,
+    ERoughness,
+    EGlossiness,
+    ENormal
 };
 
 //// Convert radians to degrees

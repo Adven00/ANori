@@ -15,7 +15,7 @@
 	</camera>
 
 	<sampler type="independent">
-		<integer name="sampleCount" value="20"/>
+		<integer name="sampleCount" value="10"/>
 	</sampler>
 
 	<mesh type="obj">
@@ -43,32 +43,16 @@
 		</bsdf>
 	</mesh>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/sphere1_.obj"/>
-        <bsdf type="diffuse">
-            <texture type="image">
-                <string name="filename" value="textures/grid.png"/>
-                <string name="use" value="albedo"/>
-            </texture>
-		</bsdf>
+    <mesh type="obj">
+		<string name="filename" value="meshes/bunny.obj"/>
+        <bsdf type="dielectric"/>
 	</mesh>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/sphere2_.obj"/>
-        <bsdf type="diffuse">
-            <texture type="image">
-                <string name="filename" value="textures/grid.png"/>
-                <string name="use" value="albedo"/>
-                <!-- <tfilter type="bilinear"/> -->
-            </texture>
-		</bsdf>
-	</mesh>
-
-	<mesh type="obj">
+    <mesh type="obj">
 		<string name="filename" value="meshes/light.obj"/>
-
-		<emitter type="area">
+        <emitter type="area">
 			<color name="radiance" value="40 40 40"/>
 		</emitter>
 	</mesh>
+
 </scene>

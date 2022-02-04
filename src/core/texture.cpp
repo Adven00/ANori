@@ -1,21 +1,22 @@
-#include <nori/texture.h>
-#include <nori/bitmap.h>
+#include <objects/texture.h>
+#include <core/bitmap.h>
 #include <map>
 
 NORI_NAMESPACE_BEGIN
 
-Texture::Texture(const PropertyList &propList) { 
-    std::string use = propList.getString("use", "diffuse");
-
+ETextureUse Texture::getTextureUse(std::string use) {
     std::map<std::string, ETextureUse> textures;
-    textures["diffuse"] = EDiffuse;
+    textures["albedo"] = EAlbedo;
+    textures["radiance"] = ERadiance;
 
     auto it = textures.find(use);
     if (it == textures.end()) 
-        m_use = EUnknownUse;
+        return EUnknownUse;
     else
-        m_use = it->second;
+        return it->second;
 }
+
+
 
 Texture::~Texture() { 
     if (m_bitmap) delete m_bitmap; 

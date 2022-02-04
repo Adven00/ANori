@@ -1,5 +1,5 @@
-#include <nori/tfilter.h>
-#include <nori/bitmap.h>
+#include <objects/tfilter.h>
+#include <core/bitmap.h>
 
 NORI_NAMESPACE_BEGIN
 

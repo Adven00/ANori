@@ -4,7 +4,7 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/bitmap.h>
+#include <core/bitmap.h>
 #include <ImfInputFile.h>
 #include <ImfOutputFile.h>
 #include <ImfChannelList.h>
@@ -19,7 +19,7 @@ NORI_NAMESPACE_BEGIN
 
 void Bitmap::saveEXR(const std::string &filename) {
     cout << "Writing a " << cols() << "x" << rows()
-         << " OpenEXR file to \"" << filename << "\"" << endl;
+         << " OpenEXR file to \"" << filename << ".exr\"" << endl;
 
     std::string path = filename + ".exr";
 
@@ -48,7 +48,7 @@ void Bitmap::saveEXR(const std::string &filename) {
 
 void Bitmap::savePNG(const std::string &filename) {
     cout << "Writing a " << cols() << "x" << rows()
-         << " PNG file to \"" << filename << "\"" << endl;
+         << " PNG file to \"" << filename << ".png\"" << endl;
 
     std::string path = filename + ".png";
 

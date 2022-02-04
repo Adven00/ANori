@@ -4,15 +4,15 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/parser.h>
-#include <nori/scene.h>
-#include <nori/camera.h>
-#include <nori/block.h>
-#include <nori/timer.h>
-#include <nori/bitmap.h>
-#include <nori/sampler.h>
-#include <nori/integrator.h>
-#include <nori/gui.h>
+#include <core/parser.h>
+#include <objects/scene.h>
+#include <objects/camera.h>
+#include <core/block.h>
+#include <tools/timer.h>
+#include <core/bitmap.h>
+#include <objects/sampler.h>
+#include <objects/integrator.h>
+#include <core/gui.h>
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
 #include <tbb/task_scheduler_init.h>

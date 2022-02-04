@@ -41,35 +41,37 @@ include_directories(
 # code file to Nori, be sure to include it in this list.
 add_executable(nori
 
-  # Header files
-  include/nori/bbox.h
-  include/nori/bitmap.h
-  include/nori/block.h
-  include/nori/bsdf.h
-  include/nori/accel.h
-  include/nori/camera.h
-  include/nori/color.h
-  include/nori/common.h
-  include/nori/dpdf.h
-  include/nori/frame.h
-  include/nori/integrator.h
-  include/nori/emitter.h
-  include/nori/mesh.h
-  include/nori/object.h
-  include/nori/parser.h
-  include/nori/proplist.h
-  include/nori/ray.h
-  include/nori/rfilter.h
-  include/nori/sampler.h
-  include/nori/scene.h
-  include/nori/timer.h
-  include/nori/transform.h
-  include/nori/vector.h
-  include/nori/warp.h
-  include/nori/texture.h
-  include/nori/tfilter.h
+# Header files
+  include/tools/bbox.h
+  include/tools/timer.h
+  include/tools/dpdf.h
+  include/tools/frame.h
+  
+  include/objects/bsdf.h
+  include/objects/camera.h
+  include/objects/integrator.h
+  include/objects/emitter.h
+  include/objects/mesh.h
+  include/objects/rfilter.h
+  include/objects/sampler.h
+  include/objects/scene.h
+  include/objects/object.h
+  include/objects/texture.h
+  include/objects/tfilter.h
+  
+  include/core/block.h
+  include/core/bitmap.h
+  include/core/accel.h
+  include/core/color.h
+  include/core/common.h
+  include/core/parser.h
+  include/core/proplist.h
+  include/core/ray.h
+  include/core/transform.h
+  include/core/vector.h
+  include/core/warp.h
 
-  # Source code files
+  # core
   src/core/bitmap.cpp
   src/core/block.cpp
   src/core/accel.cpp
@@ -87,6 +89,7 @@ add_executable(nori
   src/core/ttest.cpp
   src/core/warp.cpp
   src/core/bsdf.cpp
+  src/core/emitter.cpp
   src/core/texture.cpp
 
   # intergrators
@@ -122,7 +125,7 @@ add_definitions(${NANOGUI_EXTRA_DEFS})
 
 # The following lines build the warping test application
 add_executable(warptest
-  include/nori/warp.h
+  include/core/warp.h
   src/core/warp.cpp
   src/core/warptest.cpp
   src/core/object.cpp

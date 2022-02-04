@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <nori/proplist.h>
+#include <core/proplist.h>
 
 NORI_NAMESPACE_BEGIN
 

@@ -4,7 +4,7 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/object.h>
+#include <objects/object.h>
 
 NORI_NAMESPACE_BEGIN
 

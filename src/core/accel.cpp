@@ -4,7 +4,7 @@
     Copyright (c) 2015 by Wenzel Jakob
 */
 
-#include <nori/accel.h>
+#include <core/accel.h>
 #include <Eigen/Geometry>
 
 NORI_NAMESPACE_BEGIN

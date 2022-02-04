@@ -1,6 +1,6 @@
-#include <nori/texture.h>
-#include <nori/tfilter.h>
-#include <nori/bitmap.h>
+#include <objects/texture.h>
+#include <objects/tfilter.h>
+#include <core/bitmap.h>
 #include <filesystem/resolver.h>
 #include <fstream>
 
@@ -13,7 +13,10 @@ class ImageTexture : public Texture {
 public:
     typedef unsigned char uchar;
 
-    ImageTexture(const PropertyList &propList) : Texture(propList) {
+    ImageTexture(const PropertyList &propList) {
+        std::string use = propList.getString("use");
+        m_use = getTextureUse(use);
+
         filesystem::path filename =
             getFileResolver()->resolve(propList.getString("filename"));
 
@@ -50,10 +53,6 @@ public:
         return m_tfilter->eval(uv, Vector2i(x, y), Point2f(-0.5f), m_bitmap);
     }
 
-    const Bitmap *getBitmap() {
-        return m_bitmap;
-    }
-
     void addChild(NoriObject *obj) {
         switch (obj->getClassType()) {
             case ETextureFilter:
@@ -75,7 +74,11 @@ public:
     }
 
     std::string toString() const {
-        return tfm::format("ImageTexture[filename=\"%s\"]", m_filename);
+        return tfm::format(
+            "ImageTexture[filename=\"%s\", use=%s]",
+            m_filename,
+            textureUseName(m_use)
+        );
     }
 
 private:

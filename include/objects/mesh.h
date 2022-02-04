@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include <nori/object.h>
-#include <nori/frame.h>
-#include <nori/bbox.h>
-#include <nori/sampler.h>
-#include <nori/dpdf.h>
+#include <objects/object.h>
+#include <tools/frame.h>
+#include <tools/bbox.h>
+#include <objects/sampler.h>
+#include <tools/dpdf.h>
 
 NORI_NAMESPACE_BEGIN
 
